@@ -2,6 +2,7 @@ class Laser {
   int x, y, w, h, speed;
   boolean nm;
   PImage l1;
+  PVector lezgo;
   
   Laser(int x, int y) {
   this.x = x;
@@ -9,7 +10,7 @@ class Laser {
   w = 50;
   h =50;
   speed = 5;
-
+     lezgo = mbot.move;
  l1 = loadImage ("destructor.png");
 
 
@@ -23,8 +24,8 @@ class Laser {
   
   void move() {
     
-    PVector lezgo = mbot.move;
-    lezgo.mult(3);
+
+    lezgo.mult(1.5);
           x+=lezgo.x;
       y+=lezgo.y;
   //y-=speed;
@@ -43,7 +44,7 @@ class Laser {
   //  } else {return false;}
   //}
     boolean outOfBounds () {
-      if (y>height|y<0-height|x<-width|x>width) { 
+      if (y < mbot.y + height|y < mbot.y - height|x < mbot.x - width|x < mbot.x + width) { 
     return true;
       } else {return false;}
   }
