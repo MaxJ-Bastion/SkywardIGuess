@@ -1,14 +1,17 @@
 //Maxwell Johnson| April 1, 2026 | Tank Game (Skyward themed)
 MBOT mbot;
+//Laser laser;
 //Planet planet;
 ArrayList<Planet> planets = new ArrayList<Planet>();
 ArrayList<Star> stars = new ArrayList<Star>();
+ArrayList<Laser> lasers = new ArrayList<Laser>();
 int camX, camY;
 void setup() {
   fullScreen();
 //size(800,800);
 background(15,15,50);
 mbot= new MBOT();
+//laser=new Laser(0,0);
 planets.add( new Planet("planet.png"));
 planets.add( new Planet("roshar.png"));
 planets.add( new Planet("deathworld.png"));
@@ -33,7 +36,7 @@ void draw() {
 background(15,15,50);
   pushMatrix();
   translate(mbot.camX, mbot.camY);
-
+//laser.display();
   // WORLD OBJECTS
   //fill(255);
   //rect(100,100,100,100);
@@ -71,7 +74,18 @@ getOut.mult(-1);
       mbot.x+=getOut.x;
       mbot.y+=getOut.y;
 }
-println("Planets :" +planets.size());
+    }
+
+for(int  i = 0; i<lasers.size();i++) {
+      Laser laser = lasers.get(i);
+laser.display();
+laser.move();
+      if (laser.outOfBounds()) {
+        lasers.remove(laser);
+        i--;
+      }
+
+println("Laser :" +lasers.size());
 //float d = dist(planet.x,planet.y,p.x,p.y);
 //if () planets.add (new Planet());
 }
@@ -81,6 +95,14 @@ println("Planets :" +planets.size());
 mbot.display();
 mbot.move();
 
+
+
+}
+
+
+
+void mouseClicked() {
+lasers.add(new Laser(mbot.x,mbot.y));
 
 
 }
