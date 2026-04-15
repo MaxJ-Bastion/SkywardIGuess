@@ -2,6 +2,7 @@ class MBOT {
 int x,y,xs, ys,camX,camY;
 PImage mbot;
 PVector move;
+float angle;
 
   MBOT() {
   //x=width/2;
@@ -29,7 +30,7 @@ PVector move;
  float worldMouseX = mouseX - camX;
       float worldMouseY = mouseY - camY;
 
-float angle = atan2(worldMouseY - y, worldMouseX - x);
+angle = atan2(worldMouseY - y, worldMouseX - x);
   //float angle = atan2(worldMouseY-height/2,worldMouseX-width/2);
 
   

@@ -1,17 +1,20 @@
 //Maxwell Johnson| April 1, 2026 | Tank Game (Skyward themed)
 MBOT mbot;
+//Asteroid aster;
 //Laser laser;
 //Planet planet;
 ArrayList<Planet> planets = new ArrayList<Planet>();
 ArrayList<Star> stars = new ArrayList<Star>();
 ArrayList<Laser> lasers = new ArrayList<Laser>();
-int camX, camY;
+ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
+int camX, camY,realCamX,realCamY,oldX,oldY,moveX,moveY;
 void setup() {
   fullScreen();
   //size(800,800);
   background(15, 15, 50);
   mbot= new MBOT();
   //laser=new Laser(0,0);
+  //aster=new Asteroid();
   planets.add( new Planet("planet.png"));
   planets.add( new Planet("roshar.png"));
   planets.add( new Planet("deathworld.png"));
@@ -23,7 +26,8 @@ void setup() {
   //planets.add( new Planet());
   //planets.add( new Planet());
   //planets.add(new Planet());
-
+realCamX=0;
+realCamX=0;
   for (int i = 0; i < 1000; i++) {
     stars.add(new Star());
   }
@@ -33,9 +37,19 @@ void draw() {
 
   camX = width/2-mbot.x;
   camY = height/2-mbot.y;
+  
+  
+  oldX=realCamX;
+  oldY=realCamY;
+  moveX=(mbot.camX-oldX)/5;
+  moveY=(mbot.camY-oldY)/5;
+  realCamX+=moveX;
+  realCamY+=moveY;
+  
   background(15, 15, 50);
   pushMatrix();
-  translate(mbot.camX, mbot.camY);
+  translate(realCamX,realCamY);
+  //translate(mbot.camX, mbot.camY);
   //laser.display();
   // WORLD OBJECTS
   //fill(255);
@@ -63,23 +77,24 @@ void draw() {
     //  //i--;
     //}
     //println("Stars :" +stars.size());
-  }
+    
 
-  for (int  i = 0; i<planets.size(); i++) {
-    Planet planet = planets.get(i);
-    planet.display();
-    if (planet.noTouchie()) {
-      PVector getOut = mbot.move;
-      getOut.mult(-1);
+  }
+  
+   if(asters.size()<50) asters.add (new Asteroid());
+  for (int  i = 0; i<asters.size(); i++) {
+    Asteroid aster = asters.get(i);
+    aster.display();
+    aster.move();
+    
+    if(aster.noTouchie()) {
+            PVector getOut = mbot.move;
+      getOut.mult(-3);
       mbot.x+=getOut.x;
       mbot.y+=getOut.y;
+   // asters.remove(aster);
+    
     }
-  }
-
-  for (int  i = 0; i<lasers.size(); i++) {
-    Laser laser = lasers.get(i);
-    laser.display();
-    laser.move();
     //if (laser.outOfBounds()) {
     //  lasers.remove(laser);
     //  i--;
@@ -90,14 +105,57 @@ void draw() {
     //if () planets.add (new Planet());
   }
 
+  for (int  i = 0; i<planets.size(); i++) {
+    Planet planet = planets.get(i);
+    planet.display();
+    if (planet.noTouchie()) {
+      PVector getOut = mbot.move;
+      getOut.mult(-2);
+      mbot.x+=getOut.x;
+      mbot.y+=getOut.y;
+    }
+  }
+if(mousePressed&&lasers.size()<100) {
+lasers.add (new Laser(mbot.x,mbot.y));
+}
+  for (int  i = 0; i<lasers.size(); i++) {
+    Laser laser = lasers.get(i);
+    laser.display();
+    laser.move();
+    //if (laser.outOfBounds()) {
+    //  lasers.remove(laser);
+    //  i--;
+    //}
+    if (laser.outOfBounds()) {
+    lasers.remove(laser);
+    }
+
+      for (int  j = 0; j<asters.size(); j++) {
+    Asteroid aster = asters.get(j);
+    if (laser.intersect(aster)) {
+    lasers.remove(laser);
+    i--;
+    asters.remove(aster);
+    j--;
+    }
+    
+  }
+
+    println("Laser :" +lasers.size());
+    //float d = dist(planet.x,planet.y,p.x,p.y);
+    //if () planets.add (new Planet());
+  }
+ 
 
   popMatrix();
   mbot.display();
   mbot.move();
+  
+
 }
 
 
 
-void mouseClicked() {
-  lasers.add(new Laser(mbot.x, mbot.y));
-}
+//void mouseClicked() {
+//  lasers.add(new Laser(mbot.x, mbot.y));
+//}

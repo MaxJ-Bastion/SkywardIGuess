@@ -3,6 +3,7 @@ class Laser {
   boolean nm;
   PImage l1;
   PVector lezgo;
+  float angle;
   
   Laser(int x, int y) {
   this.x = x;
@@ -12,18 +13,25 @@ class Laser {
   speed = 5;
      lezgo = mbot.move;
  l1 = loadImage ("destructor.png");
-
+angle = mbot.angle;
 
   }
 
   void display () {
+pushMatrix();
+     //translate(mbot.camX,mbot.camY);
+      //translate(mbot.x,mbot.y);
+      translate(x,y);
+    rotate(radians(angle*(180/PI)+90));
     imageMode (CENTER);
     l1.resize (w,h);
-  image (l1,x,y);
+  image (l1,0,0);
+  popMatrix();
   }
   
   void move() {
     
+
 
     lezgo.mult(1.5);
           x+=lezgo.x;
@@ -44,8 +52,16 @@ class Laser {
   //  } else {return false;}
   //}
     boolean outOfBounds () {
-      if (y < mbot.y + height|y < mbot.y - height|x < mbot.x - width|x < mbot.x + width) { 
+      if (y > mbot.y + height|y < mbot.y - height|x < mbot.x - width|x > mbot.x + width) { 
     return true;
       } else {return false;}
+  }
+  
+  
+    boolean intersect (Asteroid aster) {
+    float d = dist(x,y,aster.x,aster.y);
+    if (d<aster.diam) {
+        return true;
+    } else {return false;}
   }
 }
