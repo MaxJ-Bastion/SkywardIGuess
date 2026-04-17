@@ -33,7 +33,7 @@ pushMatrix();
     
 
 
-    lezgo.mult(1.5);
+    lezgo.mult(1.2);
           x+=lezgo.x;
       y+=lezgo.y;
   //y-=speed;
