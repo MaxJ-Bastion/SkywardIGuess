@@ -8,7 +8,7 @@ ArrayList<Planet> planets = new ArrayList<Planet>();
 ArrayList<Star> stars = new ArrayList<Star>();
 ArrayList<Laser> lasers = new ArrayList<Laser>();
 ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
-int camX, camY,realCamX,realCamY,oldX,oldY,moveX,moveY,time;
+int camX, camY,realCamX,realCamY,oldX,oldY,moveX,moveY,time,score;
 void setup() {
   fullScreen();
   //size(800,800);
@@ -34,6 +34,8 @@ time=0;
   for (int i = 0; i < 1000; i++) {
     stars.add(new Star());
   }
+  
+  score=0;
 }
 
 void draw() {
@@ -95,6 +97,7 @@ void draw() {
       getOut.mult(-3);
       mbot.x+=getOut.x;
       mbot.y+=getOut.y;
+      mbot.health-=1;
    // asters.remove(aster);
     
     }
@@ -143,7 +146,10 @@ time=frameCount;
     if (aster.health ==0){
     asters.remove(aster);
     j--;
-    } else aster.diam/=2;
+    score+=100;
+    } else {aster.diam/=2;
+score+=100;  
+}
     }
     
   }
@@ -160,10 +166,27 @@ time=frameCount;
   mbot.display();
   mbot.move();
 
-
+scoreBoard();
 }
 
 
+
+
+void scoreBoard() {
+  fill(127,127);
+rect(0,height-100,width,100);
+textSize(50);
+fill(40,60,200);
+text("Score: "+score,100,height-25);
+
+fill(255,10,10);
+rect(50,height-250,10,100 );
+
+fill(10,255,10);
+if(mbot.health>0)
+rect(50,height-(150+mbot.health),10,mbot.health );
+
+}
 
 //void mouseClicked() {
 //  lasers.add(new Laser(mbot.x, mbot.y));
