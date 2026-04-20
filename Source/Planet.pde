@@ -1,13 +1,17 @@
 class Planet {
   int x, y, diam, speed;
   //PVector moves;
+  String name;
   PImage planet;
 color c;
-  Planet(String name) {
+  Planet(String name,int x,int y) {
     //x = int (random (-width-mbot.x,width+mbot.x));
     //y = int (random (-height-mbot.y,height+mbot.y));
-    x=int (random (-4000,4000));
-    y=int (random (-4000,4000));
+    //x=int (random (-4000,4000));
+    //y=int (random (-4000,4000));
+    this.x=x;
+    this.y=y;
+    this.name=name;
     //x= mbot.x;
     //y= mbot.y;
     diam = int (random (500, 700));

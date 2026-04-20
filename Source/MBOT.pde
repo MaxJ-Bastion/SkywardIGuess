@@ -2,7 +2,7 @@ class MBOT {
 int x,y,xs, ys,camX,camY,health;
 PImage mbot;
 PVector move;
-float angle;
+float angle,sheild;
 
   MBOT() {
   //x=width/2;
@@ -15,6 +15,7 @@ float angle;
   move = new PVector(0,0);
   
   health=100;
+  sheild=100;
   }
   
   void display(){
@@ -53,12 +54,21 @@ angle = atan2(worldMouseY - y, worldMouseX - x);
       PVector move2 = PVector.sub(mouse, si);
       move= move2;
       move.normalize();
+      if(fast==false)
       move.mult(xs);
+      else move.mult(2*xs);
       x+=move2.x;
       y+=move2.y;
-     x = constrain(x, -4500,
-      4500);
-    y = constrain(y, -4500, 4500);
+      
+      if(port==true&&mousePressed) {
+      if(x>8499|x<-8499|y>8499|y<-8499){
+      x=300;
+      y=300;}
+      }
+      
+     x = constrain(x, -8500,
+      8500);
+    y = constrain(y, -8500, 8500);
 // PVector move = new PVector(cos(angle), sin(angle));
 //move.mult(xs);
 

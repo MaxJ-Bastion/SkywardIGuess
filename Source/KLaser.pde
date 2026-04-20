@@ -1,19 +1,19 @@
-class Laser {
+class KLaser {
   int x, y, w, h, speed;
   boolean nm;
   PImage l1;
   PVector lezgo;
   float angle;
   
-  Laser(int x, int y) {
+  KLaser(int x, int y,KRELL k) {
   this.x = x;
   this.y = y;
   w = 50;
   h =50;
   speed = 5;
-     lezgo = mbot.move;
- l1 = loadImage ("destructor.png");
-angle = mbot.angle;
+     lezgo = k.move;
+ l1 = loadImage ("klaser.png");
+angle = k.angle;
 
   }
 
@@ -33,7 +33,7 @@ pushMatrix();
     
 
 
-    lezgo.mult(1.2);
+    lezgo.mult(1.01);
           x+=lezgo.x;
       y+=lezgo.y;
   //y-=speed;
@@ -58,16 +58,11 @@ pushMatrix();
   }
   
   
-    boolean intersectA (Asteroid aster) {
-    float d = dist(x,y,aster.x,aster.y);
-    if (d<aster.diam) {
-        return true;
-    } else {return false;}
-  }
+
   
-      boolean intersectK (KRELL k) {
-    float d = dist(x,y,k.x,k.y);
-    if (d<k.diam) {
+      boolean intersect () {
+    float d = dist(x,y,mbot.x,mbot.y);
+    if (d<50) {
         return true;
     } else {return false;}
   }

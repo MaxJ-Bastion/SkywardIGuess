@@ -8,8 +8,8 @@ class Asteroid {
   Asteroid() {
     //x = int (random (-width-mbot.x,width+mbot.x));
     //y = int (random (-height-mbot.y,height+mbot.y));
-    x=int (random (-4000, 4000));
-    y=int (random (-4000, 4000));
+    x=int (random (-8000, 8000));
+    y=int (random (-8000, 8000));
     //x= mbot.x;
     //y= mbot.y;
     diam = int (random (50, 200));
@@ -55,10 +55,10 @@ age = 0;
   void move() {
     x+=xs;
     y+=ys;
-    if (x<-4500||x>4500) {
+    if (x<-8500||x>8500) {
       xs*=-1;
     }
-    if (y<-4500||y>4500) {
+    if (y<-8500||y>8500) {
       ys*=-1;
     }
   }
