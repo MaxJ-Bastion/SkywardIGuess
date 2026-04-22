@@ -1,9 +1,10 @@
 class Planet {
-  int x, y, diam, speed;
+  int x, y, diam, speed,ax,ay;
   //PVector moves;
   String name;
-  PImage planet;
+  PImage planet,arr;
 color c;
+boolean touched;
   Planet(String name,int x,int y) {
     //x = int (random (-width-mbot.x,width+mbot.x));
     //y = int (random (-height-mbot.y,height+mbot.y));
@@ -18,8 +19,9 @@ color c;
     speed = 10;
     c = int((random (100, 225)));
     
-    
+    arr=loadImage("arrow.png");
     planet= loadImage(name);
+    touched=false;
   }
 
   void display () {
@@ -41,6 +43,27 @@ float d= dist(x,y,mbot.x,mbot.y);
 if (d >1000)return true;
 else return false;
 
+}
+
+void arrow() {
+ax=x;
+ay=y;
+ax = constrain (ax,mbot.x-width/2+100-int(mbot.move.x),mbot.x+width/2-100-int(mbot.move.x));
+ay = constrain (ay,mbot.y-height/2+100-int(mbot.move.y),mbot.y+height/2-100-int(mbot.move.y));
+fill(255);
+arr.resize(20,20);
+
+pushMatrix();
+translate(ax,ay);
+float angle =(atan2(y - mbot.y, x - mbot.x));
+rotate(radians(angle*(180/PI)+90));
+image(arr,0,0);
+
+
+popMatrix();
+
+
+//circle(ax,ay,10);
 }
   //void move() {
   //  moves = mbot.move;

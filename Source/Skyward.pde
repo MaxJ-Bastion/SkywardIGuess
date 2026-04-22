@@ -1,7 +1,8 @@
 //Maxwell Johnson| April 1, 2026 | Tank Game (Skyward themed)
 MBOT mbot;
+Planet detritus;
 //KRELL krell;
-Timer sheildt,kltime,kr;
+Timer sheildt,kltime,kr,dt;
 //Asteroid aster;
 //Laser laser;
 //Planet planet;
@@ -9,10 +10,11 @@ ArrayList<Planet> planets = new ArrayList<Planet>();
 ArrayList<KRELL> bads = new ArrayList<KRELL>();
 ArrayList<Star> stars = new ArrayList<Star>();
 ArrayList<Laser> lasers = new ArrayList<Laser>();
+ArrayList<DLaser> dls = new ArrayList<DLaser>();
 ArrayList<KLaser> klasers = new ArrayList<KLaser>();
 ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
 int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score,level;
-boolean fast,s,port;
+boolean fast,s,port, detdef,pow;
 void setup() {
   fullScreen();
   //size(800,800);
@@ -21,10 +23,11 @@ void setup() {
  // krell = new KRELL();
   //laser=new Laser(0,0);
   //aster=new Asteroid();
+  detritus = new Planet("detritus.png", 0, 0);
   planets.add( new Planet("planet.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
   planets.add( new Planet("roshar.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
   planets.add( new Planet("deathworld.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
-  planets.add( new Planet("detritus.png", 0, 0));
+  //planets.add( new Planet("detritus.png", 0, 0));
   planets.add( new Planet("vibeworld.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
   planets.add( new Planet("lightworld.png", 1500,1500));
   planets.add( new Planet("clarkplanet1.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
@@ -39,8 +42,10 @@ void setup() {
   sheildt=new Timer(2000);
   kltime=new Timer(500);
   kltime.start();
-  kr=new Timer(10000);
+  kr=new Timer(100);
   kr.start();
+  dt=new Timer(2000);
+  dt.start();
   for (int i = 0; i < 1000; i++) {
     stars.add(new Star());
   }
@@ -65,6 +70,11 @@ void draw() {
 
   background(15, 15, 50);
   pushMatrix();
+  if(dt.isFinished()&&detdef==true) {
+  dls.add (new DLaser());
+dt.start();
+}
+  
   translate(realCamX, realCamY);
   //translate(mbot.camX, mbot.camY);
   //laser.display();
@@ -128,18 +138,27 @@ void draw() {
   for (int  i = 0; i<planets.size(); i++) {
     Planet planet = planets.get(i);
     planet.display();
+        if(planet.touched==false)planet.arrow();
+        if(detdef) {
+        
+        
+        }
+        
     if (planet.noTouchie()) {
       PVector getOut = mbot.move;
       getOut.mult(-2);
       mbot.x+=getOut.x;
       mbot.y+=getOut.y;
-      
+      planet.touched=true;
       if(planet.name=="roshar.png") {s=true;}
       else if(planet.name=="vibeworld.png") {fast=true;}
       else if(planet.name=="lightworld.png") {port=true;}
+      else if(planet.name=="deathworld.png") {detdef=true;}
     }
+    
+
   }
-  if (mousePressed&&lasers.size()<100&&(frameCount-time)>10) {
+  if (mousePressed&&lasers.size()<100&&(frameCount-time)>10&&mouseButton==LEFT) {
     lasers.add (new Laser(mbot.x, mbot.y));
     time=frameCount;
   }
@@ -194,6 +213,49 @@ void draw() {
   
   
   
+   for (int  i = 0; i<dls.size(); i++) {
+    DLaser d = dls.get(i);
+
+    //if (laser.outOfBounds()) {pppppppp
+    //  lasers.remove(laser);
+    //  i--;
+    //}
+    if (d.outOfBounds()&&dls.size()>1) {
+      dls.remove(d);
+    }
+
+    for (int  j = 0; j<bads.size(); j++) {
+      
+      
+      KRELL k = bads.get(j);
+      float go=dist(0,0,k.x,k.y);
+      
+      if(go<1500&&detdef==true) {
+          d.display(k);
+    d.move(k);
+      if (d.intersectK(k)&&dls.size()>0) {
+        dls.remove(d);
+        i--;
+        //k.health--;
+        //if (k.health ==0) {
+          bads.remove(k);
+          j--;
+         // score+=1000;
+      }
+    }
+      }
+    
+    println("Asteroids :" +asters.size());
+    //float d = dist(planet.x,planet.y,p.x,p.y);
+    //if () planets.add (new Planet());
+  }
+  
+  
+  
+  
+  
+  
+  
   
  
   for (int  i = 0; i<klasers.size(); i++) {
@@ -239,7 +301,12 @@ void draw() {
     }
   //krell.display();
   //krell.move();
-
+detritus.display();
+if (detritus.noTouchie()) {
+      PVector getOut = mbot.move;
+      getOut.mult(-2);
+      mbot.x+=getOut.x;
+      mbot.y+=getOut.y;}
 
   popMatrix();
   mbot.display();

@@ -54,9 +54,9 @@ angle = atan2(worldMouseY - y, worldMouseX - x);
       PVector move2 = PVector.sub(mouse, si);
       move= move2;
       move.normalize();
-      if(fast==false)
-      move.mult(xs);
-      else move.mult(2*xs);
+      if(fast==true&&mousePressed&&mouseButton==RIGHT)
+      move.mult(2*xs);
+      else move.mult(xs);
       x+=move2.x;
       y+=move2.y;
       
