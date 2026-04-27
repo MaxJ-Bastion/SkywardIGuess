@@ -139,10 +139,10 @@ void draw() {
     Planet planet = planets.get(i);
     planet.display();
         if(planet.touched==false)planet.arrow();
-        if(detdef) {
+        //if(detdef) {
         
         
-        }
+        //}
         
     if (planet.noTouchie()) {
       PVector getOut = mbot.move;
@@ -154,6 +154,7 @@ void draw() {
       else if(planet.name=="vibeworld.png") {fast=true;}
       else if(planet.name=="lightworld.png") {port=true;}
       else if(planet.name=="deathworld.png") {detdef=true;}
+      else if(planet.name=="ringodeath.png") {pow=true;}
     }
     
 
@@ -179,8 +180,9 @@ void draw() {
       if (laser.intersectA(aster)&&lasers.size()>0) {
         lasers.remove(laser);
         i--;
+        if (pow==true) {aster.health-=5;} else
         aster.health--;
-        if (aster.health ==0) {
+        if (aster.health <=0) {
           asters.remove(aster);
           j--;
           score+=100;
@@ -196,8 +198,10 @@ void draw() {
       if (laser.intersectK(k)&&lasers.size()>0) {
         lasers.remove(laser);
         i--;
+        if(pow ==true) {
+        k.health-=3;} else
         k.health--;
-        if (k.health ==0) {
+        if (k.health <=0) {
           bads.remove(k);
           j--;
           score+=1000;
