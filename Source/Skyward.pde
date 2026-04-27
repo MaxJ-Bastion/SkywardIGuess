@@ -2,7 +2,7 @@
 MBOT mbot;
 Planet detritus;
 //KRELL krell;
-Timer sheildt,kltime,kr,dt;
+Timer sheildt, kltime, kr, dt;
 //Asteroid aster;
 //Laser laser;
 //Planet planet;
@@ -13,14 +13,15 @@ ArrayList<Laser> lasers = new ArrayList<Laser>();
 ArrayList<DLaser> dls = new ArrayList<DLaser>();
 ArrayList<KLaser> klasers = new ArrayList<KLaser>();
 ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
-int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score,level;
-boolean fast,s,port, detdef,pow;
+ArrayList<Pup> puppies = new ArrayList<Pup>();
+int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score, level, unl;
+boolean fast, s, port, detdef, pow;
 void setup() {
   fullScreen();
   //size(800,800);
   background(15, 15, 50);
   mbot= new MBOT();
- // krell = new KRELL();
+  // krell = new KRELL();
   //laser=new Laser(0,0);
   //aster=new Asteroid();
   detritus = new Planet("detritus.png", 0, 0);
@@ -29,10 +30,10 @@ void setup() {
   planets.add( new Planet("deathworld.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
   //planets.add( new Planet("detritus.png", 0, 0));
   planets.add( new Planet("vibeworld.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
-  planets.add( new Planet("lightworld.png", 1500,1500));
+  planets.add( new Planet("lightworld.png", 1500, 1500));
   planets.add( new Planet("clarkplanet1.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
   planets.add( new Planet("ringodeath.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
-// bads.add(new KRELL());
+  // bads.add(new KRELL());
   //planets.add( new Planet());
   //planets.add( new Planet());
   //planets.add(new Planet());
@@ -44,6 +45,7 @@ void setup() {
   kltime.start();
   kr=new Timer(100);
   kr.start();
+
   dt=new Timer(2000);
   dt.start();
   for (int i = 0; i < 1000; i++) {
@@ -52,6 +54,8 @@ void setup() {
 
   score=0;
   level=1;
+  unl=2;
+  pow=false;
 }
 
 void draw() {
@@ -59,7 +63,7 @@ void draw() {
   camX = width/2-mbot.x;
   camY = height/2-mbot.y;
 
-//level =int(score/5000);
+  //level =int(score/5000);
 
   oldX=realCamX;
   oldY=realCamY;
@@ -70,11 +74,11 @@ void draw() {
 
   background(15, 15, 50);
   pushMatrix();
-//  if(dt.isFinished()&&detdef==true) {
-//  dls.add (new DLaser());
-//dt.start();
-//}
-  
+  //  if(dt.isFinished()&&detdef==true) {
+  //  dls.add (new DLaser());
+  //dt.start();
+  //}
+
   translate(realCamX, realCamY);
   //translate(mbot.camX, mbot.camY);
   //laser.display();
@@ -121,7 +125,7 @@ void draw() {
         mbot.sheild-=1;
         sheildt.start();
       } else
-      mbot.health-=1;
+        mbot.health-=1;
       sheildt.start();
       // asters.remove(aster);
     }
@@ -135,33 +139,61 @@ void draw() {
     //if () planets.add (new Planet());
   }
 
+
+  for (int  i = 0; i<puppies.size(); i++) {
+    Pup p = puppies.get(i);
+    p.display();
+
+
+    if (p.noTouchie()) {
+      if (p.type =='h') {
+        mbot.health+=50;
+        if (mbot.health>100) mbot.health=100;
+      }
+
+      if (p.type =='a') {
+        mbot.ammo+=50;
+        if (mbot.ammo>100) mbot.ammo=100;
+      }
+
+
+
+      puppies.remove(p);
+    }
+  }
+
   for (int  i = 0; i<planets.size(); i++) {
     Planet planet = planets.get(i);
     planet.display();
-        if(planet.touched==false)planet.arrow();
-        //if(detdef) {
-        
-        
-        //}
-        
+    if (planet.touched==false)planet.arrow();
+    //if(detdef) {
+
+
+    //}
+
     if (planet.noTouchie()) {
       PVector getOut = mbot.move;
       getOut.mult(-2);
       mbot.x+=getOut.x;
       mbot.y+=getOut.y;
       planet.touched=true;
-      if(planet.name=="roshar.png") {s=true;}
-      else if(planet.name=="vibeworld.png") {fast=true;}
-      else if(planet.name=="lightworld.png") {port=true;}
-      else if(planet.name=="deathworld.png") {detdef=true;}
-      else if(planet.name=="ringodeath.png") {pow=true;}
+      if (planet.name=="roshar.png") {
+        s=true;
+      } else if (planet.name=="vibeworld.png") {
+        fast=true;
+      } else if (planet.name=="lightworld.png") {
+        port=true;
+      } else if (planet.name=="deathworld.png") {
+        detdef=true;
+      } else if (planet.name=="ringodeath.png") {
+        pow=true;
+      }
     }
-    
-
   }
-  if (mousePressed&&lasers.size()<100&&(frameCount-time)>10&&mouseButton==LEFT) {
+  if (mousePressed&&lasers.size()<100&&(frameCount-time)>10&&mouseButton==LEFT&&mbot.ammo>0) {
     lasers.add (new Laser(mbot.x, mbot.y));
     time=frameCount;
+    mbot.ammo-=1;
   }
   for (int  i = 0; i<lasers.size(); i++) {
     Laser laser = lasers.get(i);
@@ -180,44 +212,59 @@ void draw() {
       if (laser.intersectA(aster)&&lasers.size()>0) {
         lasers.remove(laser);
         i--;
-        if (pow==true) {aster.health-=5;} else
-        aster.health--;
+        if (pow==true) {
+          aster.health-=5;
+        } else
+          aster.health--;
         if (aster.health <=0) {
           asters.remove(aster);
           j--;
           score+=100;
+          float r = int(random(0,1));
+           puppies.add(new Pup( aster.x, aster.y,'a'));
         } else {
           aster.diam/=2;
           score+=100;
         }
       }
     }
-    
+
     for (int  j = 0; j<bads.size(); j++) {
       KRELL k = bads.get(j);
       if (laser.intersectK(k)&&lasers.size()>0) {
         lasers.remove(laser);
         i--;
-        if(pow ==true) {
-        k.health-=3;} else
-        k.health--;
+        if (pow ==true) {
+          k.health-=3;
+        } else
+          k.health--;
         if (k.health <=0) {
           bads.remove(k);
           j--;
           score+=1000;
+          
+          float r = int(random(0,1));
+           puppies.add(new Pup( k.x, k.y,'h'));
+          
+         // unl--;
+        }
       }
-    }
     }
     println("Asteroids :" +asters.size());
     //float d = dist(planet.x,planet.y,p.x,p.y);
     //if () planets.add (new Planet());
   }
-  
-  
-  
-  
-  
-   for (int  i = 0; i<dls.size(); i++) {
+
+
+  //if (unl == 0)
+  //{level+=1;
+  //unl=level;
+
+  //}
+
+
+
+  for (int  i = 0; i<dls.size(); i++) {
     DLaser d = dls.get(i);
 
     //if (laser.outOfBounds()) {pppppppp
@@ -229,39 +276,39 @@ void draw() {
     }
 
     for (int  j = 0; j<bads.size(); j++) {
-      
-      
+
+
       KRELL k = bads.get(j);
-      float go=dist(0,0,k.x,k.y);
-      
-      if(go<1500&&detdef==true) {
-          d.display(k);
-    d.move(k);
-      if (d.intersectK(k)&&dls.size()>0) {
-        dls.remove(d);
-        i--;
-        //k.health--;
-        //if (k.health ==0) {
+      float go=dist(0, 0, k.x, k.y);
+
+      if (go<1500&&detdef==true) {
+        d.display(k);
+        d.move(k);
+        if (d.intersectK(k)&&dls.size()>0) {
+          dls.remove(d);
+          i--;
+          //k.health--;
+          //if (k.health ==0) {
           bads.remove(k);
           j--;
-         // score+=1000;
+          // score+=1000;
+        }
       }
     }
-      }
-    
+
     println("Asteroids :" +asters.size());
     //float d = dist(planet.x,planet.y,p.x,p.y);
     //if () planets.add (new Planet());
   }
-  
-  
-  
-  
-  
-  
-  
-  
- 
+
+
+
+
+
+
+
+
+
   for (int  i = 0; i<klasers.size(); i++) {
     KLaser kl = klasers.get(i);
     kl.display();
@@ -276,41 +323,49 @@ void draw() {
 
 
 
-      if (kl.intersect()&&klasers.size()>0) {
-        klasers.remove(kl);
-        i--;
-        if(mbot.sheild>0&&s==true) {mbot.sheild-=5;} else
+    if (kl.intersect()&&klasers.size()>0) {
+      klasers.remove(kl);
+      i--;
+      if (mbot.sheild>0&&s==true) {
+        mbot.sheild-=5;
+      } else
         mbot.health-=5;
     }
-    
+
     println("Asteroids :" +asters.size());
     //float d = dist(planet.x,planet.y,p.x,p.y);
     //if () planets.add (new Planet());
   }
-  
-  
-  
-  
-  
-  if(kr.isFinished()) { bads.add(new KRELL());bads.add(new KRELL());kr=new Timer(60000/level); kr.start();}
-    for (int  i = 0; i<bads.size(); i++) {
-      KRELL k = bads.get(i);
-      k.display();
-      k.move();
-      
-         if (k.fighting()&&k.ktimer.isFinished()) {
-    klasers.add (new KLaser(k.x, k.y,k));
-    k.ktimer.start();
+
+
+
+
+
+  if (kr.isFinished()) {
+    bads.add(new KRELL());
+    bads.add(new KRELL());
+    kr=new Timer(60000/level);
+    kr.start();
   }
+  for (int  i = 0; i<bads.size(); i++) {
+    KRELL k = bads.get(i);
+    k.display();
+    k.move();
+
+    if (k.fighting()&&k.ktimer.isFinished()) {
+      klasers.add (new KLaser(k.x, k.y, k));
+      k.ktimer.start();
     }
+  }
   //krell.display();
   //krell.move();
-detritus.display();
-if (detritus.noTouchie()) {
-      PVector getOut = mbot.move;
-      getOut.mult(-2);
-      mbot.x+=getOut.x;
-      mbot.y+=getOut.y;}
+  detritus.display();
+  if (detritus.noTouchie()) {
+    PVector getOut = mbot.move;
+    getOut.mult(-2);
+    mbot.x+=getOut.x;
+    mbot.y+=getOut.y;
+  }
 
   popMatrix();
   mbot.display();
@@ -324,14 +379,14 @@ if (detritus.noTouchie()) {
 
 void scoreBoard() {
   fill(255);
-  text(mbot.x/85+", "+mbot.y/-85,50,50);
+  text(mbot.x/85+", "+mbot.y/-85, 50, 50);
   fill(127, 127);
   rect(0, height-100, width, 100);
   textSize(50);
   fill(40, 60, 200);
   text("Score: "+score, 100, height-25);
-  text("Level:" +level,500,height-25);
-//health
+  text("Level:" +level, 500, height-25);
+  //health
   fill(255, 10, 10);
   rect(50, height-450, 10, 300 );
 
@@ -339,18 +394,30 @@ void scoreBoard() {
   if (mbot.health>0)
     rect(50, height-(150+mbot.health*3), 10, mbot.health*3 );
 
-//sheild
+  //sheild
 
-if(s==true) {
-if(sheildt.isFinished()&&mbot.sheild<100) {mbot.sheild+=.05;}
+  if (s==true) {
+    if (sheildt.isFinished()&&mbot.sheild<100) {
+      mbot.sheild+=.05;
+    }
 
-  fill(10, 10, 10);
-  rect(75, height-450, 10, 300 );
+    fill(10, 10, 10);
+    rect(75, height-450, 10, 300 );
 
-  fill(70, 100, 255);
-  if (mbot.sheild*3>0)
-    rect(75, height-(150+mbot.sheild*3), 10, mbot.sheild*3 );
-}
+    fill(70, 100, 255);
+    if (mbot.sheild*3>0)
+      rect(75, height-(150+mbot.sheild*3), 10, mbot.sheild*3 );
+  }
+  
+  
+    //ammo
+  fill(50);
+  rect(width-50, height-450, 10, 300 );
+
+  fill(200, 150, 30);
+  if (mbot.ammo>0)
+    rect(width-50, height-(150+mbot.ammo*3), 10, mbot.ammo*3 );
+
 }
 //void mouseClicked() {
 //  lasers.add(new Laser(mbot.x, mbot.y));

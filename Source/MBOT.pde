@@ -1,5 +1,5 @@
 class MBOT {
-int x,y,xs, ys,camX,camY,health;
+int x,y,xs, ys,camX,camY,health,ammo;
 PImage mbot;
 PVector move;
 float angle,sheild;
@@ -16,6 +16,7 @@ float angle,sheild;
   
   health=100;
   sheild=100;
+  ammo=100;
   }
   
   void display(){

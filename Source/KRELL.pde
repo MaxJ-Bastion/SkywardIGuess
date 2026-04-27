@@ -16,7 +16,7 @@ Timer ktimer;
   x=int (random (-8000, 8000));
   y=int (random (-8000, 8000));
   diam=150;
-  health=10;
+  health=level*5;
       angle = atan2(mbot.y - y, mbot.x - x);
       ktimer=new Timer(500);
       ktimer.start();
