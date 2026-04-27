@@ -70,10 +70,10 @@ void draw() {
 
   background(15, 15, 50);
   pushMatrix();
-  if(dt.isFinished()&&detdef==true) {
-  dls.add (new DLaser());
-dt.start();
-}
+//  if(dt.isFinished()&&detdef==true) {
+//  dls.add (new DLaser());
+//dt.start();
+//}
   
   translate(realCamX, realCamY);
   //translate(mbot.camX, mbot.camY);
