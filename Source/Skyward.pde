@@ -15,7 +15,8 @@ ArrayList<KLaser> klasers = new ArrayList<KLaser>();
 ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
 ArrayList<Pup> puppies = new ArrayList<Pup>();
 int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score, level, unl;
-boolean fast, s, port, detdef, pow;
+boolean fast, s, port, detdef, pow,mb;
+PImage he,she,am,cy;
 void setup() {
   fullScreen();
   //size(800,800);
@@ -25,14 +26,15 @@ void setup() {
   //laser=new Laser(0,0);
   //aster=new Asteroid();
   detritus = new Planet("detritus.png", 0, 0);
-  planets.add( new Planet("planet.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
-  planets.add( new Planet("roshar.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
-  planets.add( new Planet("deathworld.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
+  planets.add( new Planet("planet.png", int (random (-12000, 12000)), int (random (-12000, 12000))));
+  planets.add( new Planet("roshar.png", int (random (-12000, 12000)), int (random (-12000, 12000))));
+  planets.add( new Planet("deathworld.png", int (random (-12000, 12000)), int (random (-12000, 12000))));
   //planets.add( new Planet("detritus.png", 0, 0));
-  planets.add( new Planet("vibeworld.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
-  planets.add( new Planet("lightworld.png", 1500, 1500));
-  planets.add( new Planet("clarkplanet1.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
-  planets.add( new Planet("ringodeath.png", int (random (-8000, 8000)), int (random (-8000, 8000))));
+  planets.add( new Planet("vibeworld.png", int (random (-12000, 12000)), int (random (-12000, 12000))));
+  planets.add( new Planet("lightworld.png", int (random (-12000, 12000)), int (random (-12000, 12000))));
+  planets.add( new Planet("clarkplanet1.png", int (random (-12000, 12000)), int (random (-12000, 12000))));
+  planets.add( new Planet("ringodeath.png", int (random (-12000, 12000)), int (random (-12000, 12000))));
+    planets.add( new Planet("desertp.png", int (random (-12000, 12000)), int (random (-12000, 12000))));
   // bads.add(new KRELL());
   //planets.add( new Planet());
   //planets.add( new Planet());
@@ -56,6 +58,17 @@ void setup() {
   level=1;
   unl=2;
   pow=false;
+  mb=false;
+  
+  he= loadImage("hpup.png");
+  she=loadImage("spup.png");
+  am=loadImage("apup.png");
+  cy= loadImage("cytopup.png");
+  
+  he.resize(40,40);
+  she.resize(40,40);
+  am.resize(40,40);
+  cy.resize(40,40);
 }
 
 void draw() {
@@ -147,13 +160,18 @@ void draw() {
 
     if (p.noTouchie()) {
       if (p.type =='h') {
-        mbot.health+=50;
+        mbot.health+=10;
         if (mbot.health>100) mbot.health=100;
       }
 
       if (p.type =='a') {
-        mbot.ammo+=50;
+        mbot.ammo+=20;
         if (mbot.ammo>100) mbot.ammo=100;
+      }
+      
+            if (p.type =='c') {
+        mbot.cyto+=10;
+        if (mbot.cyto>100) mbot.cyto=100;
       }
 
 
@@ -187,6 +205,9 @@ void draw() {
         detdef=true;
       } else if (planet.name=="ringodeath.png") {
         pow=true;
+      }
+      else if (planet.name=="desertp.png") {
+        mb=true;
       }
     }
   }
@@ -243,8 +264,9 @@ void draw() {
           j--;
           score+=1000;
           
-          float r = int(random(0,1));
+           if (random(0,1)>.25)
            puppies.add(new Pup( k.x, k.y,'h'));
+           else puppies.add(new Pup( k.x, k.y,'c'));
           
          // unl--;
         }
@@ -344,6 +366,11 @@ void draw() {
   if (kr.isFinished()) {
     bads.add(new KRELL());
     bads.add(new KRELL());
+        bads.add(new KRELL());
+    bads.add(new KRELL());
+        bads.add(new KRELL());
+    bads.add(new KRELL());
+    
     kr=new Timer(60000/level);
     kr.start();
   }
@@ -356,6 +383,10 @@ void draw() {
       klasers.add (new KLaser(k.x, k.y, k));
       k.ktimer.start();
     }
+    
+    
+    float d = dist(k.x,k.y,mbot.x,mbot.y);
+    if(d<mbot.blades) {bads.remove(k);}
   }
   //krell.display();
   //krell.move();
@@ -386,6 +417,8 @@ void scoreBoard() {
   fill(40, 60, 200);
   text("Score: "+score, 100, height-25);
   text("Level:" +level, 500, height-25);
+  
+  imageMode(CENTER);
   //health
   fill(255, 10, 10);
   rect(50, height-450, 10, 300 );
@@ -393,7 +426,7 @@ void scoreBoard() {
   fill(10, 255, 10);
   if (mbot.health>0)
     rect(50, height-(150+mbot.health*3), 10, mbot.health*3 );
-
+    image(he,55,height-120);
   //sheild
 
   if (s==true) {
@@ -402,11 +435,13 @@ void scoreBoard() {
     }
 
     fill(10, 10, 10);
-    rect(75, height-450, 10, 300 );
+    rect(85, height-450, 10, 300 );
 
     fill(70, 100, 255);
     if (mbot.sheild*3>0)
-      rect(75, height-(150+mbot.sheild*3), 10, mbot.sheild*3 );
+      rect(85, height-(150+mbot.sheild*3), 10, mbot.sheild*3 );
+      
+          image(she,90,height-120);
   }
   
   
@@ -417,6 +452,18 @@ void scoreBoard() {
   fill(200, 150, 30);
   if (mbot.ammo>0)
     rect(width-50, height-(150+mbot.ammo*3), 10, mbot.ammo*3 );
+
+    image(am,width-45,height-120);
+
+    //cyto
+  fill(50);
+  rect(width-85, height-450, 10, 300 );
+
+  fill(50, 0, 250);
+  if (mbot.cyto>0)
+    rect(width-85, height-(150+mbot.cyto*3), 10, mbot.cyto*3 );
+    
+    image(cy,width-80,height-120);
 
 }
 //void mouseClicked() {

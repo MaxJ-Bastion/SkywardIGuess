@@ -20,6 +20,8 @@ class Pup {
       pup= loadImage("hpup.png");
     else if (type == 'a')
       pup= loadImage("apup.png");
+         else if (type == 'c')
+      pup= loadImage("cytopup.png"); 
     }
 
     void display () {
