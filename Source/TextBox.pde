@@ -33,7 +33,7 @@ class Box {
     textAlign(LEFT,CENTER);
     text(line1,180,70);
     text(line2,180,100);
-    guy.resize(100,100);
+    guy.resize(120,120);
     image(guy,90,75);
   }
 }

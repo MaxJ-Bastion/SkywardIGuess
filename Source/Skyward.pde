@@ -3,7 +3,7 @@ MBOT mbot;
 Box box;
 Planet detritus;
 //KRELL krell;
-Timer sheildt, kr, dt,textt;
+Timer sheildt, kr, dt, textt;
 //Asteroid aster;
 //Laser laser;
 //Planet planet;
@@ -16,14 +16,15 @@ ArrayList<KLaser> klasers = new ArrayList<KLaser>();
 ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
 ArrayList<Pup> puppies = new ArrayList<Pup>();
 int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score, level, unl;
-boolean fast, s, port, detdef, pow,mb;
-PImage he,she,am,cy;
+boolean fast, s, port, detdef, pow, mb,start;
+PImage he, she, am, cy,back;
+char screen;
 void setup() {
   fullScreen();
   //size(800,800);
   background(15, 15, 50);
   mbot= new MBOT();
-  box = new Box("MBOT:","Those KRELL really look like bad news, let's go find some planets to give us the technology and training","that we need to stop them from destroying Detritus!!!","johnson_tank.png",1050,100);
+  box = new Box("MBOT:", "Those KRELL really look like bad news, let's go find some planets to give us the technology and training", "that we need to stop them from destroying Detritus!!!", "johnson_tank.png", 1050, 100);
   // krell = new KRELL();
   //laser=new Laser(0,0);
   //aster=new Asteroid();
@@ -36,7 +37,7 @@ void setup() {
   planets.add( new Planet("lightworld.png", int (random (-20000, 20000)), int (random (-20000, 20000))));
   planets.add( new Planet("clarkplanet1.png", int (random (-20000, 20000)), int (random (-20000, 20000))));
   planets.add( new Planet("ringodeath.png", int (random (-20000, 20000)), int (random (-20000, 20000))));
-    planets.add( new Planet("desertp.png", int (random (-20000, 20000)), int (random (-20000, 20000))));
+  planets.add( new Planet("desertp.png", int (random (-20000, 20000)), int (random (-20000, 20000))));
   // bads.add(new KRELL());
   //planets.add( new Planet());
   //planets.add( new Planet());
@@ -45,12 +46,12 @@ void setup() {
   realCamX=0;
   time=0;
   sheildt=new Timer(2000);
-//  kltime=new Timer(500);
- // kltime.start();
+  //  kltime=new Timer(500);
+  // kltime.start();
   kr=new Timer(100);
   kr.start();
-textt=new Timer(10000);
-textt.start();
+  textt=new Timer(10000);
+  textt.start();
   dt=new Timer(2000);
   dt.start();
   for (int i = 0; i < 1000; i++) {
@@ -62,19 +63,41 @@ textt.start();
   unl=2;
   pow=false;
   mb=false;
-  
+start=false;
   he= loadImage("hpup.png");
   she=loadImage("spup.png");
   am=loadImage("apup.png");
   cy= loadImage("cytopup.png");
-  
-  he.resize(40,40);
-  she.resize(40,40);
-  am.resize(40,40);
-  cy.resize(40,40);
+  back=loadImage("SkyBack.png");
+
+  he.resize(40, 40);
+  she.resize(40, 40);
+  am.resize(40, 40);
+  cy.resize(40, 40);
+  screen='s';
 }
 
 void draw() {
+switch(screen) {
+case 's':
+startScreen();
+break;
+case 'p':
+game();
+break;
+}
+  
+  
+  
+  
+}
+
+
+void startScreen() {
+background(back);
+}
+
+void game(){
 
   camX = width/2-mbot.x;
   camY = height/2-mbot.y;
@@ -171,8 +194,8 @@ void draw() {
         mbot.ammo+=50;
         if (mbot.ammo>100) mbot.ammo=100;
       }
-      
-            if (p.type =='c') {
+
+      if (p.type =='c') {
         mbot.cyto+=10;
         if (mbot.cyto>100) mbot.cyto=100;
       }
@@ -200,26 +223,25 @@ void draw() {
       planet.touched=true;
       if (planet.name=="roshar.png") {
         textt.start();
-        box = new Box("MBOT:","Great job finding Roshar! I think this Fabrial shield tech will really help us not be killed by the KRELL. Unfortunately, it seems like"," this planet is completely devoid of mushrooms, which is sad, we should come back with some later as a thank you.","johnson_tank.png",1250,100);
+        box = new Box("MBOT:", "Great job finding Roshar! I think this Fabrial shield tech will really help us not be killed by the KRELL. Unfortunately, it seems like", " this planet is completely devoid of mushrooms, which is sad, we should come back with some later as a thank you.", "johnson_tank.png", 1250, 100);
         s=true;
       } else if (planet.name=="vibeworld.png") {
-                textt.start();
-        box = new Box("MBOT:","There should be a new control on your console, Spensa. You should be able to right click to Overburn and speed up. I'm honestly a little insulted you feel you need"," something like this, because I was already the coolest fastest ship ever. At least, that's what I would feel if I could feel insulted, and wasn't simulating it with a subroutine.","johnson_tank.png",1600,100);
+        textt.start();
+        box = new Box("MBOT:", "There should be a new control on your console, Spensa. You should be able to right click to Overburn and speed up. I'm honestly a little insulted you feel you need", " something like this, because I was already the coolest fastest ship ever. At least, that's what I would feel if I could feel insulted, and wasn't simulating it with a subroutine.", "johnson_tank.png", 1600, 100);
         fast=true;
       } else if (planet.name=="lightworld.png") {
-                textt.start();
-        box = new Box("Spensa:","Woah. MBOT, I think I can use this training to instantly teleport back to Detritus when I hit the spacebar at the edge of the map.","It will probably take some of my cytonic energy, but it should be useful if we need to get back to defend Detritus in a hurry.","cytopup.png",1275,100);
+        textt.start();
+        box = new Box("Spensa:", "Woah. MBOT, I think I can use this training to instantly teleport back to Detritus when I hit the spacebar at the edge of the map.", "It will probably take some of my cytonic energy, but it should be useful if we need to get back to defend Detritus in a hurry.", "spensa.png", 1275, 100);
         port=true;
       } else if (planet.name=="deathworld.png") {
         detdef=true;
       } else if (planet.name=="ringodeath.png") {
-                textt.start();
-        box = new Box("MBOT:","Hmmmmm.... Not sure how I feel about this. I am obviously just a mushroom research vessel, but it seems we will now be able to","defend those mushrooms far more effectively, as that planet just upgraded my destructors.","johnson_tank.png",1250,100);
+        textt.start();
+        box = new Box("MBOT:", "Hmmmmm.... Not sure how I feel about this. I am obviously just a mushroom research vessel, but it seems we will now be able to", "defend those mushrooms far more effectively, as that planet just upgraded my destructors.", "johnson_tank.png", 1250, 100);
         pow=true;
-      }
-      else if (planet.name=="desertp.png") {
-                textt.start();
-        box = new Box("Spensa:","Finally! Jorgan's been casually holding it over me that he can use mindblades and I can't. I think with the training from that planet, I"," can make them now by pressing the spacebar. I think it'll take a lot of my cytonic energy, but it should be a useful weapon.","cytopup.png",1300,100);
+      } else if (planet.name=="desertp.png") {
+        textt.start();
+        box = new Box("Spensa:", "Finally! Jorgan's been casually holding it over me that he can use mindblades and I can't. I think with the training from that planet, I", " can make them now by pressing the spacebar. I think it'll take a lot of my cytonic energy, but it should be a useful weapon.", "spensa.png", 1300, 100);
         mb=true;
       }
     }
@@ -230,6 +252,7 @@ void draw() {
     mbot.ammo-=1;
   }
   for (int  i = 0; i<lasers.size(); i++) {
+    if(i>0){
     Laser laser = lasers.get(i);
     laser.display();
     laser.move();
@@ -254,8 +277,8 @@ void draw() {
           asters.remove(aster);
           j--;
           score+=100;
-          float r = int(random(0,1));
-           puppies.add(new Pup( aster.x, aster.y,'a'));
+          float r = int(random(0, 1));
+          puppies.add(new Pup( aster.x, aster.y, 'a'));
         } else {
           aster.diam/=2;
           score+=100;
@@ -276,19 +299,53 @@ void draw() {
           bads.remove(k);
           j--;
           score+=1000;
-          
-           if (random(0,1)>.25)
-           puppies.add(new Pup( k.x, k.y,'h'));
-           else puppies.add(new Pup( k.x, k.y,'c'));
-          
-         // unl--;
+
+          float r=random(0, 10);
+          if (r<1) {
+            textt.start();
+            box = new Box("Spensa:", "DIE, KRELLish scum!!! your ashes will surely float in space for", "eternity, and you grandchilren will weep for your utter demise!", "spensa.png", 700, 100);
+          } else  if (r<2) {
+            textt.start();
+            box = new Box("MBOT:", "Nice shot Spensa. Your weird fleshy brain is good for something after all!", "", "johnson_tank.png", 800, 75);
+          } else  if (r<3) {
+            textt.start();
+            box = new Box("MBOT:", "*Malevolent AI death noises*", "...Do you like my new subroutine?", "johnson_tank.png", 600, 100);
+          } else  if (r<4) {
+            textt.start();
+            box = new Box("Quirk:", "Spin, leave some for the rest of us!", "", "cytopup.png", 800, 75);
+          } else  if (r<5) {
+            textt.start();
+            box = new Box("Doomslug:", "Chirp!", "", "cytopup.png", 500, 75);
+          } else  if (r<6) {
+            textt.start();
+            box = new Box("Jorgan:", "What on earth are you doing Spensa?! That manuver was incredibly reckless.", "...Good job.", "cytopup.png", 800, 100);
+          } else  if (r<7) {
+            textt.start();
+            box = new Box("Rig:", "Looks like those new controls are working, tell me if there's something you need to tweak.", "", "cytopup.png", 1000, 75);
+          } else  if (r<8) {
+            textt.start();
+            box = new Box("Cobb:", "Remember your training Spensa, stop hunting for glory with destructors blazing.", "That said, keep up the good work. ***** those ***** *****", "cytopup.png", 1000, 100);
+          } else  if (r<9) {
+            textt.start();
+            box = new Box("Gran Gran:", "Next time, try it with your eyes closed. Should be more fun", "", "cytopup.png", 800, 75);
+          } else  if (r<10) {
+            textt.start();
+            box = new Box("Boomslug:", "BOOM!", "", "cytopup.png", 500, 75);
+          }
+
+
+          if (random(0, 1)>.25)
+            puppies.add(new Pup( k.x, k.y, 'h'));
+          else puppies.add(new Pup( k.x, k.y, 'c'));
+
+          // unl--;
         }
       }
     }
     println("Asteroids :" +asters.size());
     //float d = dist(planet.x,planet.y,p.x,p.y);
     //if () planets.add (new Planet());
-  }
+  }}
 
 
   //if (unl == 0)
@@ -379,11 +436,11 @@ void draw() {
   if (kr.isFinished()) {
     bads.add(new KRELL());
     bads.add(new KRELL());
-        bads.add(new KRELL());
     bads.add(new KRELL());
-        bads.add(new KRELL());
     bads.add(new KRELL());
-    
+    bads.add(new KRELL());
+    bads.add(new KRELL());
+
     kr=new Timer(60000);
     kr.start();
     level+=1;
@@ -397,10 +454,12 @@ void draw() {
       klasers.add (new KLaser(k.x, k.y, k));
       k.ktimer.start();
     }
-    
-    
-    float d = dist(k.x,k.y,mbot.x,mbot.y);
-    if(d<mbot.blades) {bads.remove(k);}
+
+
+    float d = dist(k.x, k.y, mbot.x, mbot.y);
+    if (d<mbot.blades) {
+      bads.remove(k);
+    }
   }
   //krell.display();
   //krell.move();
@@ -417,9 +476,8 @@ void draw() {
   mbot.move();
 
   scoreBoard();
-  if(textt.isFinished()==false)
+  if (textt.isFinished()==false)
     box.display();
-
 }
 
 
@@ -427,14 +485,15 @@ void draw() {
 
 void scoreBoard() {
   fill(255);
-  text(mbot.x/85+", "+mbot.y/-85, width-200, height-25);
+  textSize(50);
+  text(mbot.x/85+", "+mbot.y/-85, width-200, height-40);
   fill(127, 127);
   rect(0, height-100, width, 100);
   textSize(50);
   fill(40, 60, 200);
-  text("Score: "+score, 100, height-25);
-  text("Level:" +level, 500, height-25);
-  
+  text("Score: "+score, 100, height-40);
+  text("Level:" +level, 500, height-40);
+
   imageMode(CENTER);
   //health
   fill(255, 10, 10);
@@ -443,7 +502,7 @@ void scoreBoard() {
   fill(10, 255, 10);
   if (mbot.health>0)
     rect(50, height-(150+mbot.health*3), 10, mbot.health*3 );
-    image(he,55,height-120);
+  image(he, 55, height-120);
   //sheild
 
   if (s==true) {
@@ -457,12 +516,12 @@ void scoreBoard() {
     fill(70, 100, 255);
     if (mbot.sheild*6>0)
       rect(85, height-(150+mbot.sheild*6), 10, mbot.sheild*6 );
-      
-          image(she,90,height-120);
+
+    image(she, 90, height-120);
   }
-  
-  
-    //ammo
+
+
+  //ammo
   fill(50);
   rect(width-50, height-450, 10, 300 );
 
@@ -470,19 +529,19 @@ void scoreBoard() {
   if (mbot.ammo>0)
     rect(width-50, height-(150+mbot.ammo*3), 10, mbot.ammo*3 );
 
-    image(am,width-45,height-120);
+  image(am, width-45, height-120);
 
-    //cyto
+  //cyto
   fill(50);
   rect(width-85, height-450, 10, 300 );
-if(mbot.wait<frameCount-1000)
-  fill(50, 0, 250);else fill (50,200,100);
+  if (mbot.wait<frameCount-1000)
+    fill(50, 0, 250);
+  else fill (50, 200, 100);
   if (mbot.cyto>0)
     rect(width-85, height-(150+mbot.cyto*3), 10, mbot.cyto*3 );
-    
-    image(cy,width-80,height-120);
 
+  image(cy, width-80, height-120);
 }
-//void mouseClicked() {
-//  lasers.add(new Laser(mbot.x, mbot.y));
-//}
+void mouseClicked() {
+  if (screen=='s') screen= 'p';
+}
