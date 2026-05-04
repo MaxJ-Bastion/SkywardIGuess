@@ -13,12 +13,12 @@ Timer ktimer;
   camY=0;
   xs=8;
   ys=8;
-  x=int (random (-12000, 12000));
-  y=int (random (-12000, 12000));
-  diam=150;
-  health=level*5;
+  x=int (random (-20000, 20000));
+  y=int (random (-20000, 20000));
+  diam=100;
+  health=level*2+8;
       angle = atan2(mbot.y - y, mbot.x - x);
-      ktimer=new Timer(500);
+      ktimer=new Timer(1000);
       ktimer.start();
   }
   
@@ -27,8 +27,8 @@ Timer ktimer;
     translate(x,y);
     oldAngle=angle;
     angle = atan2(mbot.y - y, mbot.x - x);
-    newAngle=(oldAngle-angle)/2;
-    rotate(radians(angle*(180/PI)+90));
+    newAngle=(angle/100+oldAngle*99/100);
+    rotate(radians(newAngle*(180/PI)+90));
     imageMode(CENTER);
     krell.resize(diam,diam);
 image(krell,0,0);
@@ -44,10 +44,18 @@ image(krell,0,0);
       move.mult(xs);
       
       float d=dist(x,y,mbot.x,mbot.y);
-      if(d>500) {
+      //run
+      if (health<3) {
+            x-=move.x;
+      y-=move.y;
+      }
+      //average
+      else if(d>500) {
       x+=move.x;
       y+=move.y;
-      } else {
+      } else
+      //dodge
+      {
             x-=move.x;
       y-=move.y;
       float dodge = random(-5,5);
@@ -56,6 +64,10 @@ image(krell,0,0);
       
       }
   
+  if (d>5000) {
+  health=level*2;
+  
+  }
   }
   
   boolean fighting() {

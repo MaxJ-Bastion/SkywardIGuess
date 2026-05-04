@@ -1,8 +1,9 @@
 class MBOT {
-  int x, y, xs, ys, camX, camY, health, ammo, cyto;
+  int x, y, xs, ys, camX, camY, health, ammo, cyto,wait;
   PImage mbot;
   PVector move;
   float angle, sheild,blades;
+  
 
   MBOT() {
     //x=width/2;
@@ -15,9 +16,10 @@ class MBOT {
     move = new PVector(0, 0);
 blades=0;
     health=100;
-    sheild=100;
+    sheild=50;
     ammo=100;
-    cyto=40;
+    cyto=100;
+    wait=0;
   }
 
   void display() {
@@ -45,7 +47,7 @@ blades=0;
     translate(x, y);
 
     rotate(radians(angle*(180/PI)+90));
-    if(blades>0) {blades-=20;}
+    if(blades>0) {blades-=50;}
     fill(255);
     circle(0,0,blades);
     image(mbot, 0, 0);
@@ -63,25 +65,31 @@ blades=0;
     x+=move2.x;
     y+=move2.y;
 
-    if (port==true&&keyPressed&&key==' '&&cyto>5) {
-      if (x>12499|x<-12499|y>12499|y<-12499) {
+    if (port==true&&keyPressed&&key==' '&&cyto>5&&bounded()&&wait<frameCount-1000) { 
         x=300;
         y=300;
         cyto-=5;
-      }
-    } else if (mb==true&&keyPressed&&key==' '&&cyto>20){
+      wait=frameCount;
+    } else if (mb==true&&keyPressed&&key==' '&&cyto>20&&wait<frameCount-1000){
     blades+=2000;
     cyto-=20;
-    
+    wait=frameCount;
     }
 
-    x = constrain(x, -12500, 12500);
-    y = constrain(y, -12500, 12500);
+    x = constrain(x, -20500, 20500);
+    y = constrain(y, -20500, 20500);
     // PVector move = new PVector(cos(angle), sin(angle));
     //move.mult(xs);
 
     //x += move.x;
     //y += move.y;
     popMatrix();
+  }
+  
+  
+  boolean bounded() {
+        if (x>20499|x<-20499|y>20499|y<-20499) {
+return true;
+  }else return false;
   }
 }
