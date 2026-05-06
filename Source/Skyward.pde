@@ -303,7 +303,7 @@ void game(){
           float r=random(0, 10);
           if (r<1) {
             textt.start();
-            box = new Box("Spensa:", "DIE, KRELLish scum!!! your ashes will surely float in space for", "eternity, and you grandchilren will weep for your utter demise!", "spensa.png", 700, 100);
+            box = new Box("Spensa:", "DIE, KRELLish scum!!! Your ashes will surely float in space for", "eternity, and you grandchilren will weep for your utter demise!", "spensa.png", 700, 100);
           } else  if (r<2) {
             textt.start();
             box = new Box("MBOT:", "Nice shot Spensa. Your weird fleshy brain is good for something after all!", "", "johnson_tank.png", 800, 75);
@@ -331,7 +331,22 @@ void game(){
           } else  if (r<10) {
             textt.start();
             box = new Box("Boomslug:", "BOOM!", "", "cytopup.png", 500, 75);
-          }
+          } else  if (r<11) {
+            textt.start();
+            box = new Box("FM:", "Nice going Spin! Let's get that next one together", "", "cytopup.png", 700, 75);
+          } else  if (r<12) {
+            textt.start();
+            box = new Box("MBOT:", "That explosion looked kind of like a mushroom", "", "johnson_tank.png", 600, 75);
+          } else  if (r<13) {
+            textt.start();
+            box = new Box("Spensa:", "Boom! That puts me in the lead! Eat it, Jorgan!", "", "spensa.png", 600, 75);
+          } else  if (r<14) {
+            textt.start();
+            box = new Box("Ironsides:", "We thank the valiant warriors that today defend Detritus", "", "cytopup.png", 800, 75);
+          } else  if (r<15) {
+            textt.start();
+            box = new Box("Doomslug:", "Die KRELL scum!!! :)", "", "cytopup.png", 500, 75);
+          } 
 
 
           if (random(0, 1)>.25)
@@ -433,18 +448,27 @@ void game(){
 
 
 
-  if (kr.isFinished()) {
-    bads.add(new KRELL());
-    bads.add(new KRELL());
-    bads.add(new KRELL());
-    bads.add(new KRELL());
-    bads.add(new KRELL());
-    bads.add(new KRELL());
+  //if (kr.isFinished()) {
+  //  bads.add(new KRELL());
+  //  bads.add(new KRELL());
+  //  bads.add(new KRELL());
+  //  bads.add(new KRELL());
+  //  bads.add(new KRELL());
+  //  bads.add(new KRELL());
 
-    kr=new Timer(60000);
-    kr.start();
-    level+=1;
+  //  kr=new Timer(60000);
+  //  kr.start();
+  //  level+=1;
+  //}
+  if(bads.size()<level) {
+     bads.add(new KRELL());
+  
+  
   }
+  
+  level=score/1000+1;
+  
+  
   for (int  i = 0; i<bads.size(); i++) {
     KRELL k = bads.get(i);
     k.display();
