@@ -20,6 +20,8 @@ blades=0;
     ammo=100;
     cyto=100;
     wait=0;
+    x=300;
+    y=300;
   }
 
   void display() {
