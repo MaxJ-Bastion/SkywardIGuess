@@ -17,7 +17,7 @@ ArrayList<KLaser> klasers = new ArrayList<KLaser>();
 ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
 ArrayList<Pup> puppies = new ArrayList<Pup>();
 int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score, level, unl, xp;
-boolean fast, s, port, detdef, pow, mb, start, ar,sup;
+boolean fast, s, port, detdef, pow,invis,cvis, mb, start, ar,sup;
 PImage he, she, am, cy, back, det;
 char screen;
 void setup() {
@@ -73,6 +73,8 @@ void setup() {
   start=false;
   ar=false;
   sup=false;
+  invis=false;
+  cvis=false;
   he= loadImage("hpup.png");
   she=loadImage("spup.png");
   am=loadImage("apup.png");
@@ -252,6 +254,10 @@ void game() {
         textt.start();
         box = new Box("Spensa:", "Finally! Jorgan's been casually holding it over me that he can use mindblades and I can't. I think with the training from that planet, I", " can make them now by pressing the spacebar. I think it'll take a lot of my cytonic energy, but it should be a useful weapon.", "spensa.png", 1300, 100);
         mb=true;
+      } else if (planet.name=="clarkplanet1.png") {
+        textt.start();
+        box = new Box("Spensa:", "This should be cool, I think I can use cytonic projections to turn invisible when I'm holding z. I can't wait to see the looks on those", " KRELL faces when they get attacked out of nowhere.", "spensa.png", 1300, 100);
+        cvis=true;
       }
     }
   }
@@ -484,7 +490,7 @@ void game() {
     k.display();
     k.move();
 
-    if (k.fighting()&&k.ktimer.isFinished()) {
+    if (k.fighting()&&k.ktimer.isFinished()&&invis==false) {
       klasers.add (new KLaser(k.x, k.y, k));
       k.ktimer.start();
     }
@@ -520,6 +526,11 @@ void game() {
 
 
 void scoreBoard() {
+  rectMode(CORNER);
+  if(invis==true){
+  fill(50,50,255,50);
+  rect(0,0,width,height);
+  }
   fill(127, 127);
   rect(0, height-100, width, 100);
   textSize(50);
@@ -626,4 +637,18 @@ void mouseClicked() {
     xp-=5000;
     sheildt=new Timer(2000);
   }
+}
+
+void keyPressed() {
+if(key=='z'&&cvis==true) {
+invis=true;
+mbot.cyto-=.3;
+}
+}
+
+void keyReleased() {
+if(key=='z') {
+invis=false;
+}
+
 }

@@ -21,6 +21,7 @@ class Box {
   }
 
   void display () {
+    rectMode(CORNER);
     fill(127,50);
     rect (20,20,w,h);
     fill(255,200);

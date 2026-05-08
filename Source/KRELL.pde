@@ -1,5 +1,5 @@
 class KRELL {
-int x,y,xs, ys,camX,camY,diam,health;
+int x,y,xs, ys,camX,camY,diam,health,maxHealth,rx,ry,rxs,rys;
 PImage krell;
 float angle,oldAngle,newAngle;
 PVector move;
@@ -16,26 +16,44 @@ Timer ktimer;
   x=int (random (-12000, 12000));
   y=int (random (-12000, 12000));
   diam=100;
-  health=level*2+5;
+  maxHealth=level*2+5;
+  health=maxHealth;
       angle = atan2(mbot.y - y, mbot.x - x);
       ktimer=new Timer(500);
       ktimer.start();
+      rx=int(random(-10000,10000));
+      ry=int(random(-10000,10000));
+      rxs=30;
+      rys=30;
   }
   
   void display(){
     pushMatrix();
     translate(x,y);
     oldAngle=angle;
+    if(invis==false)
     angle = atan2(mbot.y - y, mbot.x - x);
+    else
+    angle = atan2(ry - y, rx - x);
     newAngle=(oldAngle-angle)/2;
     rotate(radians(angle*(180/PI)+90));
     imageMode(CENTER);
     krell.resize(diam,diam);
 image(krell,0,0);
+
   popMatrix();
+  fill(50);
+ // rectMode(CENTER);
+rect(x-50,y+60,50,5);
+rectMode(CORNER);
+float scale = 50/maxHealth;
+fill(255,0,0);
+rect(x-50,y+60,health*scale,5);
   }
   
   void move() {
+    
+    if (invis==false) {
       PVector me = new PVector(x, y);
       PVector target = new PVector (mbot.x, mbot.y);
       move = PVector.sub(target, me);
@@ -55,7 +73,26 @@ image(krell,0,0);
       y+=dodge;
       
       }
-  
+    } else{
+    
+    PVector me = new PVector(x,y);
+      PVector target = new PVector (rx, ry);
+      move = PVector.sub(target, me);
+      
+      move.normalize();
+      move.mult(xs);
+            x+=move.x;
+      y+=move.y;
+      
+      rx+=rxs;
+      ry+=rys;
+      if(rx>10000||rx<-10000){
+      rxs*=-1;
+      }
+            if(ry>10000||ry<-10000){
+      rys*=-1;
+      }
+    }
   }
   
   boolean fighting() {
