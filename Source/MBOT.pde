@@ -1,8 +1,8 @@
 class MBOT {
-  int x, y, xs, ys, camX, camY, health, ammo,wait;
+  int x, y, xs, ys, camX, camY, ammo,wait,mammo;
   PImage mbot;
   PVector move;
-  float angle, sheild,blades,cyto;
+  float angle, sheild,blades,cyto,health;
   
 
   MBOT() {
@@ -17,7 +17,8 @@ class MBOT {
 blades=0;
     health=100;
     sheild=50;
-    ammo=100;
+    mammo=50;
+    ammo=50;
     cyto=100;
     wait=0;
     x=300;

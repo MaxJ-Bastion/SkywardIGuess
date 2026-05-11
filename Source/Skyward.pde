@@ -16,7 +16,7 @@ ArrayList<DLaser> dls = new ArrayList<DLaser>();
 ArrayList<KLaser> klasers = new ArrayList<KLaser>();
 ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
 ArrayList<Pup> puppies = new ArrayList<Pup>();
-int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score, level, unl, xp;
+int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score, level, unl, xp,armor;
 boolean fast, s, port, detdef, pow,invis,cvis, mb, start, ar,sup;
 PImage he, she, am, cy, back, det;
 char screen;
@@ -75,6 +75,7 @@ void setup() {
   sup=false;
   invis=false;
   cvis=false;
+  armor=1;
   he= loadImage("hpup.png");
   she=loadImage("spup.png");
   am=loadImage("apup.png");
@@ -172,10 +173,10 @@ void game() {
       mbot.x+=getOut.x;
       mbot.y+=getOut.y;
       if (mbot.sheild>0&&s==true) {
-        mbot.sheild-=1;
+        mbot.sheild-=(1/armor);
         sheildt.start();
       } else
-        mbot.health-=1;
+        mbot.health-=(1/armor);
       sheildt.start();
       // asters.remove(aster);
     }
@@ -202,8 +203,8 @@ void game() {
       }
 
       if (p.type =='a') {
-        mbot.ammo+=50;
-        if (mbot.ammo>100) mbot.ammo=100;
+        mbot.ammo=mbot.mammo;
+
       }
 
       if (p.type =='c') {
@@ -258,6 +259,10 @@ void game() {
         textt.start();
         box = new Box("Spensa:", "This should be cool, I think I can use cytonic projections to turn invisible when I'm holding z. I can't wait to see the looks on those", " KRELL faces when they get attacked out of nowhere.", "spensa.png", 1300, 100);
         cvis=true;
+      } else if (planet.name=="rockyp.png") {
+        textt.start();
+        box = new Box("MBOT:", " Check out the new armor, Spensa. Nothing the KRELL can throw at us is getting through my new fit. I found that word in a old database of human slang,", " I've been waiting all day for a chance to use it.", "johnson_tank.png", 1300, 100);
+        if (armor<2) armor+=1;
       }
     }
   }
@@ -451,10 +456,10 @@ void game() {
       klasers.remove(kl);
       i--;
       if (mbot.sheild>0&&s==true) {
-        mbot.sheild-=5;
+        mbot.sheild-=(5/armor);
         sheildt.start();
       } else
-        mbot.health-=5;
+        mbot.health-=(5/armor);
     }
 
     println("Asteroids :" +asters.size());
@@ -574,9 +579,10 @@ void scoreBoard() {
   rect(width-50, height-450, 10, 300 );
 
   fill(200, 150, 30);
-  if (mbot.ammo>0)
-    rect(width-50, height-(150+mbot.ammo*3), 10, mbot.ammo*3 );
-
+  if (mbot.ammo>0){
+  float scale=300/mbot.mammo;
+    rect(width-50, height-(150+mbot.ammo*scale), 10, mbot.ammo*scale );
+  }
   image(am, width-45, height-120);
 
   //cyto
@@ -599,7 +605,7 @@ void detBase () {
   imageMode(CENTER);
   image(det, width/2, height/2);
   //popMatrix();
-  mbot.ammo=100;
+  mbot.ammo=mbot.mammo;
   textAlign(CENTER, CENTER);
   textSize(100);
   fill(255);
