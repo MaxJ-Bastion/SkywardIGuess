@@ -2,7 +2,7 @@
 MBOT mbot;
 Box box;
 Planet detritus;
-Button arrowb, healthb, cytob, sheildb;
+Button arrowb, healthb, cytob, sheildb, restart;
 //KRELL krell;
 Timer sheildt, kr, dt, textt;
 //Asteroid aster;
@@ -18,7 +18,7 @@ ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
 ArrayList<Pup> puppies = new ArrayList<Pup>();
 int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score, level, unl, xp,armor;
 boolean fast, s, port, detdef, pow,invis,cvis, mb, start, ar,sup;
-PImage he, she, am, cy, back, det;
+PImage he, she, am, cy, back, det,dead;
 char screen;
 void setup() {
   fullScreen();
@@ -30,6 +30,7 @@ void setup() {
   healthb = new Button( "Repairs", "1000XP", 100, 250, 100, 100, "hpup.png");
   cytob = new Button( "Cytonic Recharge", "1000 XP", 100, 400, 100, 100, "cytopup.png");
   sheildb = new Button( "Sheild Upgrade", "5000 XP", 100, 550, 100, 100, "spup.png");
+    restart = new Button( "Play Again?", "", width/2-200, 775, 100, 100, "johnson_tank.png");
 
   // krell = new KRELL();
   //laser=new Laser(0,0);
@@ -61,6 +62,7 @@ void setup() {
   dt=new Timer(2000);
   dt.start();
   det=loadImage("detritus.png");
+  dead=loadImage("deadScreen.png");
   for (int i = 0; i < 1000; i++) {
     stars.add(new Star());
   }
@@ -101,6 +103,9 @@ void draw() {
   case 'd':
     detBase();
     break;
+  case 'l':
+  lose();
+  break;
   }
 }
 
@@ -110,7 +115,7 @@ void startScreen() {
 }
 
 void game() {
-
+if(mbot.health<0) screen='l';
   camX = width/2-mbot.x;
   camY = height/2-mbot.y;
 
@@ -336,7 +341,7 @@ void game() {
               box = new Box("Quirk:", "Spin, leave some for the rest of us!", "", "cytopup.png", 800, 75);
             } else  if (r<5) {
               textt.start();
-              box = new Box("Doomslug:", "Chirp!", "", "cytopup.png", 500, 75);
+              box = new Box("Doomslug:", "Chirp!", "", "doomslug.png", 500, 75);
             } else  if (r<6) {
               textt.start();
               box = new Box("Jorgan:", "What on earth are you doing Spensa?! That manuver was incredibly reckless.", "...Good job.", "cytopup.png", 800, 100);
@@ -351,7 +356,7 @@ void game() {
               box = new Box("Gran Gran:", "Next time, try it with your eyes closed. Should be more fun", "", "cytopup.png", 800, 75);
             } else  if (r<10) {
               textt.start();
-              box = new Box("Boomslug:", "BOOM!", "", "cytopup.png", 500, 75);
+              box = new Box("Boomslug:", "BOOM!", "", "boomslug.png", 500, 75);
             } else  if (r<11) {
               textt.start();
               box = new Box("FM:", "Nice going Spin! Let's get that next one together", "", "cytopup.png", 700, 75);
@@ -366,7 +371,7 @@ void game() {
               box = new Box("Ironsides:", "We thank the valiant warriors that today defend Detritus", "", "cytopup.png", 800, 75);
             } else  if (r<15) {
               textt.start();
-              box = new Box("Doomslug:", "Die KRELL scum!!! :)", "", "cytopup.png", 500, 75);
+              box = new Box("Doomslug:", "Die KRELL scum!!! :)", "", "doomslug.png", 500, 75);
             }
 
 
@@ -624,6 +629,39 @@ void detBase () {
     mbot.y=300;
     screen='p';
   }
+}
+
+void lose () {
+background(dead);
+restart.display();
+if(restart.clicked()&&mousePressed) {
+screen='p';
+level=1;
+bads.clear();
+xp=0;
+
+
+fast=false;
+s=false;
+port=false;
+detdef=false;
+pow=false;
+invis=false;
+cvis=false;
+mb=false;
+start=false;
+ar=false;
+sup=false;
+armor=1;
+mbot.mammo=50;
+mbot.ammo=50;
+mbot.cyto=100;
+mbot.health=100;
+mbot.sheild=50;
+mbot.x=300;
+mbot.y=300;
+setup();
+}
 }
 
 void mouseClicked() {

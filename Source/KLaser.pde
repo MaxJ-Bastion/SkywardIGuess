@@ -13,7 +13,7 @@ class KLaser {
   speed = 5;
      lezgo = k.move;
  l1 = loadImage ("klaser.png");
-angle = k.angle;
+angle = k.oldAngle;
 
   }
 
@@ -26,6 +26,12 @@ pushMatrix();
     imageMode (CENTER);
     l1.resize (w,h);
   image (l1,0,0);
+  x+=cos(angle)*30;
+  y+=sin(angle)*30;
+  //    lezgo.mult(1.01);
+  //        x+=lezgo.x;
+  //    y+=lezgo.y;
+  //y-=speed;
   popMatrix();
   }
   
@@ -33,9 +39,9 @@ pushMatrix();
     
 
 
-    lezgo.mult(1.01);
-          x+=lezgo.x;
-      y+=lezgo.y;
+    //lezgo.mult(1.01);
+    //      x+=lezgo.x;
+    //  y+=lezgo.y;
   //y-=speed;
   }
   
