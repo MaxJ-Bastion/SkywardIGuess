@@ -1,6 +1,6 @@
 class MBOT {
   int x, y, xs, ys, camX, camY, ammo,wait,mammo;
-  PImage mbot;
+  PImage mbot,mbotc;
   PVector move;
   float angle, sheild,blades,cyto,health;
   
@@ -9,6 +9,7 @@ class MBOT {
     //x=width/2;
     //y=height/2;
     mbot = loadImage("johnson_tank.png");
+    mbotc=loadImage("mbotc.png");
     camX=0;
     camY=0;
     xs=20;
@@ -53,10 +54,12 @@ blades=0;
     if(blades>0) {blades-=50;}
     fill(255);
     circle(0,0,blades);
-    image(mbot, 0, 0);
+    if(charging)
+    image(mbotc, 0, 0);
 
 
-
+  if(!charging){
+    image(mbot,0,0);
     PVector si = new PVector(x, y);
     PVector mouse = new PVector (worldMouseX, worldMouseY);
     PVector move2 = PVector.sub(mouse, si);
@@ -83,7 +86,7 @@ blades=0;
     y = constrain(y, -20500, 20500);
     // PVector move = new PVector(cos(angle), sin(angle));
     //move.mult(xs);
-
+  }
     //x += move.x;
     //y += move.y;
     popMatrix();

@@ -36,9 +36,9 @@ rect(x,y-10,w*4,h+20);
     fill(0);
     textAlign(LEFT);
     textSize(30);
-    text(label, x+w+w/2, y+20);
+    text(label, x+w+w/2, y+40);
     textSize(20);
-text(text,x+w+w/2,y+50);
+text(text,x+w+w/2,y+70);
     //rect(x, y, w, h, 10);
   }
 

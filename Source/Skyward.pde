@@ -2,9 +2,9 @@
 MBOT mbot;
 Box box;
 Planet detritus;
-Button arrowb, healthb, cytob, sheildb, restart;
+Button arrowb, healthb, cytob, sheildb,ammob, restart;
 //KRELL krell;
-Timer sheildt, kr, dt, textt;
+Timer  kr, dt, textt;
 //Asteroid aster;
 //Laser laser;
 //Planet planet;
@@ -17,7 +17,7 @@ ArrayList<KLaser> klasers = new ArrayList<KLaser>();
 ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
 ArrayList<Pup> puppies = new ArrayList<Pup>();
 int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score, level, unl, xp,armor;
-boolean fast, s, port, detdef, pow,invis,cvis, mb, start, ar,sup;
+boolean fast, s, port, detdef, pow,invis,cvis, mb, start, ar,sup,charging;
 PImage he, she, am, cy, back, det,dead;
 char screen;
 void setup() {
@@ -30,6 +30,8 @@ void setup() {
   healthb = new Button( "Repairs", "1000XP", 100, 250, 100, 100, "hpup.png");
   cytob = new Button( "Cytonic Recharge", "1000 XP", 100, 400, 100, 100, "cytopup.png");
   sheildb = new Button( "Sheild Upgrade", "5000 XP", 100, 550, 100, 100, "spup.png");
+  
+    ammob = new Button( "Ammo Upgrade", "5000 XP", 100, 700, 100, 100, "apup.png");
     restart = new Button( "Play Again?", "", width/2-200, 775, 100, 100, "johnson_tank.png");
 
   // krell = new KRELL();
@@ -52,7 +54,7 @@ void setup() {
   realCamX=0;
   realCamX=0;
   time=0;
-  sheildt=new Timer(5000);
+  //sheildt=new Timer(5000);
   //  kltime=new Timer(500);
   // kltime.start();
   kr=new Timer(100);
@@ -77,6 +79,7 @@ void setup() {
   sup=false;
   invis=false;
   cvis=false;
+  charging=false;
   armor=1;
   he= loadImage("hpup.png");
   she=loadImage("spup.png");
@@ -179,10 +182,10 @@ if(mbot.health<0) screen='l';
       mbot.y+=getOut.y;
       if (mbot.sheild>0&&s==true) {
         mbot.sheild-=(1/armor);
-        sheildt.start();
+      //  sheildt.start();
       } else
         mbot.health-=(1/armor);
-      sheildt.start();
+   //   sheildt.start();
       // asters.remove(aster);
     }
     //if (laser.outOfBounds()) {
@@ -338,16 +341,16 @@ if(mbot.health<0) screen='l';
               box = new Box("MBOT:", "*Malevolent AI death noises*", "...Do you like my new subroutine?", "johnson_tank.png", 600, 100);
             } else  if (r<4) {
               textt.start();
-              box = new Box("Quirk:", "Spin, leave some for the rest of us!", "", "cytopup.png", 800, 75);
+              box = new Box("Quirk:", "Spin, leave some for the rest of us!", "", "quirk.png", 800, 75);
             } else  if (r<5) {
               textt.start();
               box = new Box("Doomslug:", "Chirp!", "", "doomslug.png", 500, 75);
             } else  if (r<6) {
               textt.start();
-              box = new Box("Jorgan:", "What on earth are you doing Spensa?! That manuver was incredibly reckless.", "...Good job.", "cytopup.png", 800, 100);
+              box = new Box(" Jerkface:", "What on earth are you doing Spensa?! That manuver was incredibly reckless.", "...Good job.", "cytopup.png", 800, 100);
             } else  if (r<7) {
               textt.start();
-              box = new Box("Rig:", "Looks like those new controls are working, tell me if there's something you need to tweak.", "", "cytopup.png", 1000, 75);
+              box = new Box("Rig:", "Looks like those new controls are working, tell me if there's something you need to tweak.", "", "rig.png", 1000, 75);
             } else  if (r<8) {
               textt.start();
               box = new Box("Cobb:", "Remember your training Spensa, stop hunting for glory with destructors blazing.", "That said, keep up the good work. ***** those ***** *****", "cytopup.png", 1000, 100);
@@ -462,7 +465,7 @@ if(mbot.health<0) screen='l';
       i--;
       if (mbot.sheild>0&&s==true) {
         mbot.sheild-=(5/armor);
-        sheildt.start();
+   //     sheildt.start();
       } else
         mbot.health-=(5/armor);
     }
@@ -525,6 +528,7 @@ if(mbot.health<0) screen='l';
 
   popMatrix();
   mbot.display();
+
   mbot.move();
 
   scoreBoard();
@@ -561,11 +565,11 @@ void scoreBoard() {
   //sheild
 
   if (s==true) {
-    if (sheildt.isFinished()&&mbot.sheild<50) {
+    if (charging==true&&mbot.sheild<50) {
       if(!sup)
       mbot.sheild+=.05;
       else
-      mbot.sheild+=1;
+      mbot.sheild+=.5;
     }
 
     fill(10, 10, 10);
@@ -588,6 +592,9 @@ void scoreBoard() {
   float scale=300/mbot.mammo;
     rect(width-50, height-(150+mbot.ammo*scale), 10, mbot.ammo*scale );
   }
+  
+  if(charging&&mbot.ammo<mbot.mammo)mbot.ammo+=1;
+  
   image(am, width-45, height-120);
 
   //cyto
@@ -624,6 +631,7 @@ void detBase () {
   healthb.display();
   cytob.display();
   sheildb.display();
+  ammob.display();
   if (keyPressed&&key=='e') {
     mbot.x=300;
     mbot.y=300;
@@ -664,6 +672,14 @@ setup();
 }
 }
 
+
+void pause() {
+background(1);
+
+
+
+}
+
 void mouseClicked() {
   if (screen=='s') screen= 'p';
   
@@ -679,7 +695,12 @@ void mouseClicked() {
     if (sheildb.clicked()&&xp>4999&&sup==false&&s==true) {
     sup=true;
     xp-=5000;
-    sheildt=new Timer(2000);
+   // sheildt=new Timer(2000);
+  }
+   if (ammob.clicked()&&xp>4999&&mbot.mammo<100) {
+    mbot.mammo=100;
+    xp-=5000;
+    
   }
 }
 
@@ -688,11 +709,18 @@ if(key=='z'&&cvis==true) {
 invis=true;
 mbot.cyto-=.3;
 }
+if (key=='c') {
+charging=true;
+}
 }
 
 void keyReleased() {
 if(key=='z') {
 invis=false;
+}
+
+if (key=='c') {
+charging=false;
 }
 
 }

@@ -11,7 +11,7 @@ class KRELL {
     krell = loadImage("krell.png");
     camX=0;
     camY=0;
-    xs=15+int(level/2);
+    xs=15;
     ys=20;
     x=int (random (-12000, 12000));
     y=int (random (-12000, 12000));
