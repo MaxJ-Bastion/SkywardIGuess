@@ -2,7 +2,7 @@
 MBOT mbot;
 Box box;
 Planet detritus;
-Button arrowb, healthb, cytob, sheildb,ammob, restart;
+Button arrowb, healthb, cytob, sheildb,sheildb2,sheildb3, ammob, ammob2,ammob3, damageb,damageb2,damageb3, armorb,armorb2,armorb3, restart;
 //KRELL krell;
 Timer  kr, dt, textt;
 //Asteroid aster;
@@ -16,9 +16,9 @@ ArrayList<DLaser> dls = new ArrayList<DLaser>();
 ArrayList<KLaser> klasers = new ArrayList<KLaser>();
 ArrayList<Asteroid> asters = new ArrayList<Asteroid>();
 ArrayList<Pup> puppies = new ArrayList<Pup>();
-int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score, level, unl, xp,armor;
-boolean fast, s, port, detdef, pow,invis,cvis, mb, start, ar,sup,charging;
-PImage he, she, am, cy, back, det,dead;
+int camX, camY, realCamX, realCamY, oldX, oldY, moveX, moveY, time, score, level, unl, xp, armor;
+boolean fast, s, port, detdef, invis, cvis, mb, start, ar, sup, charging;
+PImage he, she, am, cy, back, det, dead;
 char screen;
 void setup() {
   fullScreen();
@@ -26,13 +26,26 @@ void setup() {
   background(15, 15, 50);
   mbot= new MBOT();
   box = new Box("MBOT:", "Those KRELL really look like bad news, let's go find some planets to give us the technology and training", "that we need to stop them from destroying Detritus!!!", "johnson_tank.png", 1050, 100);
-  arrowb = new Button( "Planetary Locator", "5000 XP", 100, 100, 100, 100, "arrow.png");
-  healthb = new Button( "Repairs", "1000XP", 100, 250, 100, 100, "hpup.png");
-  cytob = new Button( "Cytonic Recharge", "1000 XP", 100, 400, 100, 100, "cytopup.png");
-  sheildb = new Button( "Sheild Upgrade", "5000 XP", 100, 550, 100, 100, "spup.png");
+  arrowb = new Button( "Planetary Locator", "5000 XP", 100, 75, 100, 100, "arrow.png", true);
+  healthb = new Button( "Repairs", "1000XP", 525, 75, 100, 100, "hpup.png", true);
+  cytob = new Button( "Cytonic Recharge", "1000 XP", 950, 75, 100, 100, "cytopup.png", true);
+
+  sheildb = new Button( "Sheild Upgrade", "10000 XP", 100, 525, 100, 100, "spup.png", false);
+  ammob = new Button( "Ammo Upgrade", "10000 XP", 100, 225, 100, 100, "apup.png", true);
+  damageb =new Button( "Dest. Upgrade", "10000 XP", 100, 375, 100, 100, "destructor.png", false);
+    armorb =new Button( "Armor Upgrade", "10000 XP", 100, 675, 100, 100, "johnson_tank.png", false);
   
-    ammob = new Button( "Ammo Upgrade", "5000 XP", 100, 700, 100, 100, "apup.png");
-    restart = new Button( "Play Again?", "", width/2-200, 775, 100, 100, "johnson_tank.png");
+    sheildb2 = new Button( "Sheild Upgrade II", "20000 XP", 525, 525, 100, 100, "spup.png", false);
+  ammob2 = new Button( "Ammo Upgrade II", "20000 XP", 525, 225, 100, 100, "apup.png", false);
+  damageb2 =new Button( "Dest. Upgrade II", "20000 XP", 525, 375, 100, 100, "destructor.png", false);
+      armorb2 =new Button( "Armor Upgrade II", "20000 XP", 525, 675, 100, 100, "johnson_tank.png", false);
+  
+    sheildb3 = new Button( "Sheild Upgrade III", "30000 XP", 950, 525, 100, 100, "spup.png", false);
+  ammob3 = new Button( "Ammo Upgrade III", "30000 XP", 950, 225, 100, 100, "apup.png", false);
+  damageb3 =new Button( "Dest. Upgrade III", "30000 XP", 950, 375, 100, 100, "destructor.png", false);
+      armorb3 =new Button( "Armor Upgrade III", "30000 XP", 950, 675, 100, 100, "johnson_tank.png", false);
+
+  restart = new Button( "Play Again?", "", width/2-200, 900, 100, 100, "johnson_tank.png", true);
 
   // krell = new KRELL();
   //laser=new Laser(0,0);
@@ -72,7 +85,7 @@ void setup() {
   score=0;
   level=0;
   unl=2;
-  pow=false;
+
   mb=false;
   start=false;
   ar=false;
@@ -80,7 +93,9 @@ void setup() {
   invis=false;
   cvis=false;
   charging=false;
+  fast=false;
   armor=1;
+  s=true;
   he= loadImage("hpup.png");
   she=loadImage("spup.png");
   am=loadImage("apup.png");
@@ -92,7 +107,7 @@ void setup() {
   am.resize(40, 40);
   cy.resize(40, 40);
   screen='s';
-  xp=0000;
+  xp=1000000;
 }
 
 void draw() {
@@ -107,8 +122,8 @@ void draw() {
     detBase();
     break;
   case 'l':
-  lose();
-  break;
+    lose();
+    break;
   }
 }
 
@@ -118,7 +133,7 @@ void startScreen() {
 }
 
 void game() {
-if(mbot.health<0) screen='l';
+  if (mbot.health<0) screen='l';
   camX = width/2-mbot.x;
   camY = height/2-mbot.y;
 
@@ -182,10 +197,10 @@ if(mbot.health<0) screen='l';
       mbot.y+=getOut.y;
       if (mbot.sheild>0&&s==true) {
         mbot.sheild-=(1/armor);
-      //  sheildt.start();
+        //  sheildt.start();
       } else
         mbot.health-=(1/armor);
-   //   sheildt.start();
+      //   sheildt.start();
       // asters.remove(aster);
     }
     //if (laser.outOfBounds()) {
@@ -212,7 +227,6 @@ if(mbot.health<0) screen='l';
 
       if (p.type =='a') {
         mbot.ammo=mbot.mammo;
-
       }
 
       if (p.type =='c') {
@@ -245,6 +259,7 @@ if(mbot.health<0) screen='l';
         textt.start();
         box = new Box("MBOT:", "Great job finding Roshar! I think this Fabrial shield tech will really help us not be killed by the KRELL. Unfortunately, it seems like", " this planet is completely devoid of mushrooms, which is sad, we should come back with some later as a thank you.", "johnson_tank.png", 1250, 100);
         s=true;
+        sheildb.on=true;
       } else if (planet.name=="vibeworld.png") {
         textt.start();
         box = new Box("MBOT:", "There should be a new control on your console, Spensa. You should be able to right click to Overburn and speed up. I'm honestly a little insulted you feel you need", " something like this, because I was already the coolest fastest ship ever. At least, that's what I would feel if I could feel insulted, and wasn't simulating it with a subroutine.", "johnson_tank.png", 1600, 100);
@@ -258,7 +273,9 @@ if(mbot.health<0) screen='l';
       } else if (planet.name=="ringodeath.png") {
         textt.start();
         box = new Box("MBOT:", "Hmmmmm.... Not sure how I feel about this. I am obviously just a mushroom research vessel, but it seems we will now be able to", "defend those mushrooms far more effectively, as that planet just upgraded my destructors.", "johnson_tank.png", 1250, 100);
-        pow=true;
+        if (mbot.pow<3)
+          mbot.pow=3;
+        damageb.on=true;
       } else if (planet.name=="desertp.png") {
         textt.start();
         box = new Box("Spensa:", "Finally! Jorgan's been casually holding it over me that he can use mindblades and I can't. I think with the training from that planet, I", " can make them now by pressing the spacebar. I think it'll take a lot of my cytonic energy, but it should be a useful weapon.", "spensa.png", 1300, 100);
@@ -271,6 +288,7 @@ if(mbot.health<0) screen='l';
         textt.start();
         box = new Box("MBOT:", " Check out the new armor, Spensa. Nothing the KRELL can throw at us is getting through my new fit. I found that word in a old database of human slang,", " I've been waiting all day for a chance to use it.", "johnson_tank.png", 1300, 100);
         if (armor<2) armor+=1;
+        armorb.on=true;
       }
     }
   }
@@ -297,10 +315,7 @@ if(mbot.health<0) screen='l';
         if (laser.intersectA(aster)&&lasers.size()>0) {
           lasers.remove(laser);
           i--;
-          if (pow==true) {
-            aster.health-=5;
-          } else
-            aster.health--;
+          aster.health-=mbot.pow;
           if (aster.health <=0) {
             asters.remove(aster);
             j--;
@@ -319,17 +334,15 @@ if(mbot.health<0) screen='l';
         if (laser.intersectK(k)&&lasers.size()>0) {
           lasers.remove(laser);
           i--;
-          if (pow ==true) {
-            k.health-=3;
-          } else
-            k.health--;
+
+          k.health-=mbot.pow;
           if (k.health <=0) {
             bads.remove(k);
             j--;
             score+=1000;
             xp+=1000 ;
 
-            float r=random(0, 10);
+            float r=random(0, 15);
             if (r<1) {
               textt.start();
               box = new Box("Spensa:", "DIE, KRELLish scum!!! Your ashes will surely float in space for", "eternity, and you grandchilren will weep for your utter demise!", "spensa.png", 700, 100);
@@ -464,10 +477,10 @@ if(mbot.health<0) screen='l';
       klasers.remove(kl);
       i--;
       if (mbot.sheild>0&&s==true) {
-        mbot.sheild-=(5/armor);
-   //     sheildt.start();
+        mbot.sheild-=(level*2/armor);
+        //     sheildt.start();
       } else
-        mbot.health-=(5/armor);
+        mbot.health-=(level*2/armor);
     }
 
     println("Asteroids :" +asters.size());
@@ -541,9 +554,9 @@ if(mbot.health<0) screen='l';
 
 void scoreBoard() {
   rectMode(CORNER);
-  if(invis==true){
-  fill(50,50,255,50);
-  rect(0,0,width,height);
+  if (invis==true) {
+    fill(50, 50, 255, 50);
+    rect(0, 0, width, height);
   }
   fill(127, 127);
   rect(0, height-100, width, 100);
@@ -565,11 +578,8 @@ void scoreBoard() {
   //sheild
 
   if (s==true) {
-    if (charging==true&&mbot.sheild<50) {
-      if(!sup)
-      mbot.sheild+=.05;
-      else
-      mbot.sheild+=.5;
+    if (charging==true&&mbot.sheild<mbot.msheild) {
+      mbot.sheild+=mbot.sup;
     }
 
     fill(10, 10, 10);
@@ -577,8 +587,11 @@ void scoreBoard() {
 
     fill(70, 100, 255);
     if (mbot.sheild*6>0)
-      rect(85, height-(150+mbot.sheild*6), 10, mbot.sheild*6 );
-
+    {
+    float scale=300/mbot.msheild;
+    
+      rect(85, height-(150+mbot.sheild*scale), 10, mbot.sheild*scale );
+    }
     image(she, 90, height-120);
   }
 
@@ -588,13 +601,13 @@ void scoreBoard() {
   rect(width-50, height-450, 10, 300 );
 
   fill(200, 150, 30);
-  if (mbot.ammo>0){
-  float scale=300/mbot.mammo;
+  if (mbot.ammo>0) {
+    float scale=300/mbot.mammo;
     rect(width-50, height-(150+mbot.ammo*scale), 10, mbot.ammo*scale );
   }
-  
-  if(charging&&mbot.ammo<mbot.mammo)mbot.ammo+=1;
-  
+
+  if (charging&&mbot.ammo<mbot.mammo)mbot.ammo+=1;
+
   image(am, width-45, height-120);
 
   //cyto
@@ -632,6 +645,16 @@ void detBase () {
   cytob.display();
   sheildb.display();
   ammob.display();
+  damageb.display();
+  armorb.display();
+    sheildb2.display();
+  ammob2.display();
+  damageb2.display();
+  armorb2.display();
+    sheildb3.display();
+  ammob3.display();
+  damageb3.display();
+  armorb3.display();
   if (keyPressed&&key=='e') {
     mbot.x=300;
     mbot.y=300;
@@ -640,87 +663,141 @@ void detBase () {
 }
 
 void lose () {
-background(dead);
-restart.display();
-if(restart.clicked()&&mousePressed) {
-screen='p';
-level=1;
-bads.clear();
-xp=0;
+  background(dead);
+  restart.display();
+  if (restart.clicked()&&mousePressed) {
+    screen='p';
+    level=1;
+    bads.clear();
+    xp=0;
 
 
-fast=false;
-s=false;
-port=false;
-detdef=false;
-pow=false;
-invis=false;
-cvis=false;
-mb=false;
-start=false;
-ar=false;
-sup=false;
-armor=1;
-mbot.mammo=50;
-mbot.ammo=50;
-mbot.cyto=100;
-mbot.health=100;
-mbot.sheild=50;
-mbot.x=300;
-mbot.y=300;
-setup();
-}
+    fast=false;
+    s=false;
+    port=false;
+    detdef=false;
+    mbot.pow=3;
+    invis=false;
+    cvis=false;
+    mb=false;
+    start=false;
+    ar=false;
+    sup=false;
+    armor=1;
+    mbot.mammo=50;
+    mbot.ammo=50;
+    mbot.cyto=100;
+    mbot.health=100;
+    mbot.sheild=50;
+    mbot.x=300;
+    mbot.y=300;
+    setup();
+  }
 }
 
 
 void pause() {
-background(1);
-
-
-
+  background(1);
 }
 
 void mouseClicked() {
   if (screen=='s') screen= 'p';
-  
-  
-  
-    if (healthb.clicked()&&xp>999&&mbot.health<100) {
+
+
+
+  if (healthb.clicked()&&xp>999&&mbot.health<100) {
     mbot.health=100;
     xp-=1000;
-  }  if (cytob.clicked()&&xp>999&&mbot.cyto<100) {
+  }
+  if (cytob.clicked()&&xp>999&&mbot.cyto<100) {
     mbot.cyto=100;
     xp-=1000;
   }
-    if (sheildb.clicked()&&xp>4999&&sup==false&&s==true) {
-    sup=true;
-    xp-=5000;
-   // sheildt=new Timer(2000);
+  if (sheildb.clicked()&&xp>9999&&sheildb2.on==false&&s==true) {
+    mbot.sup=.05;
+    mbot.msheild=100;
+    xp-=10000;
+    sheildb2.on=true;
+    // sheildt=new Timer(2000);
   }
-   if (ammob.clicked()&&xp>4999&&mbot.mammo<100) {
+  if (ammob.clicked()&&xp>9999&&mbot.mammo<100&&ammob2.on==false) {
     mbot.mammo=100;
-    xp-=5000;
-    
+    xp-=10000;
+    ammob2.on=true;
+  }
+  if (damageb.clicked()&&xp>9999&&damageb.on==true&&damageb2.on==false) {
+    mbot.pow=5;
+    xp-=10000;
+    damageb2.on=true;
+  }
+    if (armorb.clicked()&&xp>9999&&armorb.on==true&&damageb2.on==false) {
+    armor=4;
+    xp-=10000;
+    armorb2.on=true;
+  }
+  //MK II
+    if (sheildb2.clicked()&&xp>19999&&sup==false&&sheildb2.on==true&&sheildb3.on==false) {
+    mbot.sup=.5;
+    mbot.msheild=200;
+    xp-=20000;
+    sheildb3.on=true;
+  }
+  if (ammob2.clicked()&&xp>19999&&ammob3.on==false&&ammob2.on==true) {
+    mbot.mammo=200;
+    xp-=20000;
+    ammob3.on=true;
+  }
+  if (damageb2.clicked()&&xp>19999&&damageb.on==true&&damageb3.on==false) {
+    mbot.pow=8;
+    xp-=20000;
+    damageb3.on=true;
+  }
+      if (armorb2.clicked()&&xp>19999&&armorb2.on==true&&armorb3.on==false) {
+    armor=8;
+    xp-=20000;
+    armorb3.on=true;
+  }
+  
+  //MKIII
+  
+      if (sheildb3.clicked()&&xp>29999&&sup==false&&s==true) {
+    sup=true;
+    xp-=30000;
+   // sheildb3.on=true;
+  }
+  if (ammob3.clicked()&&xp>29999&&mbot.mammo<300&&ammob3.on==true) {
+    mbot.mammo=300;
+    xp-=30000;
+   // ammob3.on=true;
+  }
+  if (damageb3.clicked()&&xp>29999&&damageb.on==true) {
+    mbot.pow=15;
+    xp-=30000;
+    //damageb3.on=true;
+  }
+      if (armorb3.clicked()&&xp>29999&&armorb3.on==true) {
+    armor=16;
+    xp-=30000;
+    //armorb2.on=true;
   }
 }
 
 void keyPressed() {
-if(key=='z'&&cvis==true) {
-invis=true;
-mbot.cyto-=.3;
-}
-if (key=='c') {
-charging=true;
-}
+  if (key=='z'&&cvis==true) {
+    invis=true;
+    mbot.cyto-=.3;
+  }
+  if (key=='c') {
+    charging=true;
+  }
 }
 
 void keyReleased() {
-if(key=='z') {
-invis=false;
-}
+  if (key=='z') {
+    invis=false;
+  }
 
-if (key=='c') {
-charging=false;
-}
-
+  if (key=='c') {
+    charging=false;
+  }
 }
