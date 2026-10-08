@@ -71,4 +71,18 @@ pushMatrix();
         return true;
     } else {return false;}
   }
+  
+        boolean intersectE (EKRELL k) {
+    float d = dist(x,y,k.x,k.y);
+    if (d<k.diam) {
+        return true;
+    } else {return false;}
+  }
+  
+        boolean intersectB (BKRELL b) {
+    float d = dist(x,y,b.x,b.y);
+    if (d<b.diam) {
+        return true;
+    } else {return false;}
+  }
 }

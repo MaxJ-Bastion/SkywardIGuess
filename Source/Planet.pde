@@ -1,8 +1,8 @@
 class Planet {
-  int x, y, diam, speed,ax,ay;
+  int x, y, diam, speed,ax,ay, h;
   //PVector moves;
   String name;
-  PImage planet,arr;
+  PImage planet,arr, mapplanet;
 color c;
 boolean touched;
   Planet(String name,int x,int y) {
@@ -13,6 +13,8 @@ boolean touched;
     this.x=x;
     this.y=y;
     this.name=name;
+    
+    h= 100;
     //x= mbot.x;
     //y= mbot.y;
     diam = int (random (500, 700));
@@ -21,6 +23,7 @@ boolean touched;
     
     arr=loadImage("arrow.png");
     planet= loadImage(name);
+    mapplanet=loadImage(name);
     touched=false;
   }
 
@@ -30,6 +33,16 @@ boolean touched;
     planet.resize(diam, diam);
     image (planet,x, y);
   }
+  
+    void displaymap () {
+    float xr = height/20500;
+float yr=height/20500;
+    fill (c);
+    mapplanet.resize(100, 100);
+    image (mapplanet,(x*.025), (y*.025));
+  }
+  
+  
 
 
 boolean noTouchie() {
@@ -44,6 +57,24 @@ if (d >1000)return true;
 else return false;
 
 }
+
+
+void health() {
+  textSize(50);
+  fill(255);
+  text("Detritus",width/2,75);
+  rectMode(CORNER);
+  fill(50,0,0);
+rect (500,100,1000,20);
+fill (255,0,0);
+rect (500,100,h*10,20);
+
+
+
+
+
+}
+
 
 void arrow() {
 ax=x;
@@ -65,6 +96,9 @@ popMatrix();
 
 //circle(ax,ay,10);
 }
+
+
+
   //void move() {
   //  moves = mbot.move;
   //  //move.mult (speed);

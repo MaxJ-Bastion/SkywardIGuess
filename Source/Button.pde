@@ -5,9 +5,9 @@ class Button {
   String label, pic,text;
   float x, y, w, h;
   PImage grug;
-  boolean on;
+  boolean on, bought;
 
-  Button(String label, String text, float x, float y, float w, float h, String pic,boolean on) {
+  Button(String label, String text, float x, float y, float w, float h, String pic,boolean on, boolean bought) {
     this.label = label;
     this.x = x;
     this.y = y;
@@ -16,6 +16,7 @@ class Button {
     this.pic = pic;
     this.text=text;
     this.on=on;
+    this.bought=bought;
 
   }
 
@@ -44,6 +45,11 @@ text(text,x+w+w/2,y+70);
 
 if(!on) {
     fill(50,50,200,100);
+rect(x,y-10,w*4,h+20);
+}
+
+if (bought) {
+    fill(255,20,50,100);
 rect(x,y-10,w*4,h+20);
 }
 
